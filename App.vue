@@ -4,7 +4,7 @@
 			// #ifdef MP-WEIXIN
 			uni.loadFontFace({
 				family: 'Zen Maru Gothic',
-				source: 'url("https://cdn.jsdelivr.net/gh/googlefonts/zen-marugothic@main/fonts/ttf/ZenMaruGothic-Regular.ttf")',
+				source: 'url("https://cdn.jsdelivr.net/gh/zhaocan306/dad-baby-log@master/static/fonts/ZenMaruGothic-Regular-subset.ttf")',
 				global: true,
 				success: () => console.log('Zen Maru Gothic loaded'),
 				fail: (err) => console.log('Zen Maru Gothic failed', err)
