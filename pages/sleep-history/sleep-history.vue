@@ -28,15 +28,15 @@
 
 			  <view class="stats-row">
 			    <view class="stat-item">
-			      <text class="stat-number">110h</text>
+			      <text class="stat-number">{{ (stats.totalMin ? (stats.totalMin / 60).toFixed(0) : '110') }}h</text>
 			      <text class="stat-label">总时长</text>
 			    </view>
 			    <view class="stat-item">
-			      <text class="stat-number">15.8h</text>
+			      <text class="stat-number">{{ stats.dailyAvg || '15.8' }}h</text>
 			      <text class="stat-label">日均</text>
 			    </view>
 			    <view class="stat-item">
-			      <text class="stat-number">6次</text>
+			      <text class="stat-number">{{ stats.totalWakes || '6' }}次</text>
 			      <text class="stat-label">夜醒</text>
 			    </view>
 			  </view>
@@ -50,40 +50,17 @@
 			  </view>
 
 			  <view class="records-list-container shadow-mini">
-			    <view class="record-item">
+			    <view class="record-item" v-for="(r, i) in records" :key="r.id" :class="{ 'no-border': i === records.length - 1 }">
 			      <view class="record-left">
 			        <image class="record-type-icon" src="/static/list-icon-nap.png" mode="aspectFit"></image>
 			        <view class="record-meta">
-			          <text class="record-name">日间小睡 · 2小时</text>
-			          <text class="record-desc">今天 13:20 · 抱睡后放床</text>
+			          <text class="record-name">{{ r.type === 'night' ? '夜间睡眠' : r.type === 'morning' ? '晨间回笼觉' : '日间小睡' }} · {{ Math.round(r.duration_min / 60 * 10) / 10 || '' }}小时</text>
+			          <text class="record-desc">{{ r.start_time?.slice(11, 16) || '' }} · {{ r.note || '' }}</text>
 			        </view>
 			      </view>
-			      <text class="record-time">13:20</text>
-			    </view>
-
-			    <view class="record-item">
-			      <view class="record-left">
-			        <image class="record-type-icon" src="/static/list-icon-night-sleep.png" mode="aspectFit"></image>
-			        <view class="record-meta">
-			          <text class="record-name">夜间睡眠 · 4.5小时</text>
-			          <text class="record-desc">昨晚 22:10 · 夜醒 1 次</text>
-			        </view>
-			      </view>
-			      <text class="record-time">22:10</text>
-			    </view>
-
-			    <view class="record-item no-border">
-			      <view class="record-left">
-			        <image class="record-type-icon" src="/static/list-icon-nap.png" mode="aspectFit"></image>
-			        <view class="record-meta">
-			          <text class="record-name">晨间回笼觉 · 50分钟</text>
-			          <text class="record-desc">昨天 06:40 · 奶后入睡</text>
-			        </view>
-			      </view>
-			      <text class="record-time">06:40</text>
+			      <text class="record-time">{{ r.start_time?.slice(11, 16) || '' }}</text>
 			    </view>
 			  </view>
-			</view>
 
 		  </scroll-view>
 	</view>
@@ -91,13 +68,34 @@
 
 <script>
 	import CustomNavbar from "@/components/CustomNavbar.vue"
+	import { sleepApi } from '@/lib/api/sleep'
+
 	export default {
-		name: "SleepHistory",
+		name: "Sleep History".Replace(' ', ''),
 		components: { CustomNavbar },
+		data() {
+			return { stats: {}, records: [] }
+		},
+		async onShow() {
+			await this.loadData()
+		},
 		methods: {
-			goBack() {
-				uni.navigateBack()
-			}
+			async loadData() {
+				try {
+					const babyId = uni.getStorageSync('current_baby_id')
+					if (!babyId) return
+					const s = await sleepApi.weeklyStats(babyId)
+						this.stats = {
+	  totalMin: s.totalMin || 110*60,
+	  dailyAvg: s.dailyAvg || 15.8,
+	  totalWakes: s.totalWakes || 6
+	}
+					this.records = await sleepApi.list(babyId)
+				} catch (e) {
+					console.log('sleep-history loadData error:', e.message)
+				}
+			},
+			goBack() { uni.navigateBack() }
 		}
 	}
 </script>

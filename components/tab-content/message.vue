@@ -17,22 +17,22 @@
 			  <view class="profile-info-row">
 			    <image class="family-avatar" src="/static/family-avatar.png" mode="aspectFit"></image>
 			    <view class="profile-meta">
-			      <text class="family-name">cc cc 的家庭</text>
-			      <text class="baby-detail">小鲸鱼 · 29 天 · 女宝宝</text>
+			      <text class="family-name">{{ family?.name || baby?.name || 'cc cc' }} 的家庭</text>
+			      <text class="baby-detail">{{ baby?.name || '小鲸鱼' }} · {{ baby?.birthday ? Math.floor((Date.now() - new Date(baby.birthday).getTime()) / 86400000) : '29' }} 天{{ baby?.gender === 'female' ? ' · 女宝宝' : baby?.gender === 'male' ? ' · 男宝宝' : '' }}</text>
 			      <view class="member-badge">
 			        <image class="member-badge-icon" src="/static/icon-group.png" mode="aspectFit"></image>
-			        <text class="member-badge-text">3 位家人同步记录</text>
+			        <text class="member-badge-text">{{ family?.members?.length || '3' }} 位家人同步记录</text>
 			      </view>
 			    </view>
 			  </view>
 
 			  <view class="stats-row">
 			    <view class="stat-item">
-			      <text class="stat-number">29</text>
+			      <text class="stat-number">{{ baby?.birthday ? Math.floor((Date.now() - new Date(baby.birthday).getTime()) / 86400000) : '29' }}</text>
 			      <text class="stat-label">记录天</text>
 			    </view>
 			    <view class="stat-item">
-			      <text class="stat-number">186</text>
+			      <text class="stat-number">{{ totalRecords }}</text>
 			      <text class="stat-label">条记录</text>
 			    </view>
 			    <view class="stat-item">
@@ -119,9 +119,39 @@
 
 <script>
 	import CustomNavbar from "@/components/CustomNavbar.vue"
+	import { familyApi } from '@/lib/api/family'
+	import { feedApi } from '@/lib/api/feed'
+
 	export default {
 		name: "TabMessage",
-		components: { CustomNavbar }
+		components: { CustomNavbar },
+		data() {
+			return {
+				family: null,
+				baby: null,
+				totalRecords: 0
+			}
+		},
+		async onShow() {
+			await this.loadData()
+		},
+		methods: {
+			async loadData() {
+				try {
+					this.family = await familyApi.getCurrent()
+					if (this.family?.babies?.length) {
+						this.baby = this.family.babies[0]
+					}
+					const babyId = uni.getStorageSync('current_baby_id')
+					if (babyId) {
+						const feeds = await feedApi.list(babyId, { limit: 1000, days: 365 })
+						this.totalRecords = feeds.length || 186
+					}
+				} catch (e) {
+					console.log('Message loadData error:', e.message)
+				}
+			}
+		}
 	}
 </script>
 

@@ -22,7 +22,7 @@
 			  <view class="card-header">
 			    <text class="card-title">下一针</text>
 			    <view class="countdown-badge">
-			      <text class="countdown-text">还剩 2 天</text>
+			      <text class="countdown-text">{{ nextVaccine ? '还剩 ' + Math.ceil((new Date(nextVaccine.due_date) - new Date()) / 86400000) + ' 天' : '--' }}</text>
 			    </view>
 			  </view>
 
@@ -31,8 +31,8 @@
 			      <image class="vaccine-needle-icon" src="/static/icon-needle-orange.png" mode="aspectFit"></image>
 			    </view>
 			    <view class="vaccine-info-meta">
-			      <text class="vaccine-name">乙肝疫苗第 2 针</text>
-			      <text class="vaccine-details">7月11日 10:00 · 社区卫生服务中心</text>
+			      <text class="vaccine-name">{{ nextVaccine?.name || '暂无' }}</text>
+			      <text class="vaccine-details">{{ nextVaccine?.appointment_at?.slice(0, 16)?.replace('T', ' ') || '' }} {{ nextVaccine?.location || '' }}</text>
 			    </view>
 			  </view>
 			</view>
@@ -68,32 +68,12 @@
 			  </view>
 
 			  <view class="plan-list-container shadow-mini">
-			    <view class="plan-item">
+			    <view class="plan-item" v-for="(m, i) in milestones" :key="m.id" :class="{ 'no-border': i === milestones.length - 1 }">
 			      <view class="plan-item-left">
-			        <image class="list-status-icon" src="/static/list-icon-done.png" mode="aspectFit"></image>
+			        <image class="list-status-icon" :src="'/static/list-icon-' + (m.status === 'done' ? 'done' : m.status === 'booked' ? 'pending' : 'future') + '.png'" mode="aspectFit"></image>
 			        <view class="plan-meta">
-			          <text class="plan-name">卡介苗 · 乙肝第 1 针</text>
-			          <text class="plan-desc">出生 24 小时内 · 已完成</text>
-			        </view>
-			      </view>
-			    </view>
-
-			    <view class="plan-item">
-			      <view class="plan-item-left">
-			        <image class="list-status-icon" src="/static/list-icon-pending.png" mode="aspectFit"></image>
-			        <view class="plan-meta">
-			          <text class="plan-name">乙肝第 2 针</text>
-			          <text class="plan-desc">1月龄 · 预约中</text>
-			        </view>
-			      </view>
-			    </view>
-
-			    <view class="plan-item no-border">
-			      <view class="plan-item-left">
-			        <image class="list-status-icon" src="/static/list-icon-future.png" mode="aspectFit"></image>
-			        <view class="plan-meta">
-			          <text class="plan-name">脊灰灭活疫苗</text>
-			          <text class="plan-desc">2月龄 · 待预约</text>
+			          <text class="plan-name">{{ m.vaccine_name }} · {{ m.dose || '' }}</text>
+			          <text class="plan-desc">{{ m.age_month }}月龄 · {{ m.status === 'done' ? '已完成' : m.status === 'booked' ? '预约中' : '待预约' }}</text>
 			        </view>
 			      </view>
 			    </view>
@@ -106,9 +86,32 @@
 
 <script>
 	import CustomNavbar from "@/components/CustomNavbar.vue"
+	import { vaccineApi } from '@/lib/api/vaccine'
+
 	export default {
 		name: "TabHealth",
-		components: { CustomNavbar }
+		components: { CustomNavbar },
+		data() {
+			return {
+				nextVaccine: null,
+				milestones: []
+			}
+		},
+		async onShow() {
+			await this.loadData()
+		},
+		methods: {
+			async loadData() {
+				try {
+					const babyId = uni.getStorageSync('current_baby_id')
+					if (!babyId) return
+					this.nextVaccine = await vaccineApi.nextDue(babyId)
+					this.milestones = await vaccineApi.milestones(babyId)
+				} catch (e) {
+					console.log('Health loadData error:', e.message)
+				}
+			}
+		}
 	}
 </script>
 

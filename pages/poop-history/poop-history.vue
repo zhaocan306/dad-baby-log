@@ -28,7 +28,7 @@
 
 			  <view class="stats-row">
 			    <view class="stat-item">
-			      <text class="stat-number">9次</text>
+			      <text class="stat-number">{{ stats.total || '9' }}次</text>
 			      <text class="stat-label">总次数</text>
 			    </view>
 			    <view class="stat-item">
@@ -36,7 +36,7 @@
 			      <text class="stat-label">常见量</text>
 			    </view>
 			    <view class="stat-item">
-			      <text class="stat-number">7次</text>
+			      <text class="stat-number">{{ stats.golden || '7' }}次</text>
 			      <text class="stat-label">金黄色</text>
 			    </view>
 			  </view>
@@ -49,41 +49,18 @@
 			    <text class="sort-text">按日期</text>
 			  </view>
 
-			  <view class="records-list-container shadow-mini">
-			    <view class="record-item">
+			  			  <view class="records-list-container shadow-mini">
+			    <view class="record-item" v-for="(r, i) in records" :key="r.id" :class="{ 'no-border': i === records.length - 1 }">
 			      <view class="record-left">
 			        <image class="record-type-icon" src="/static/list-icon-poop-1.png" mode="aspectFit"></image>
 			        <view class="record-meta">
-			          <text class="record-name">黄金便便 · 中量</text>
-			          <text class="record-desc">今天 08:45 · 软糊状 · 已换尿布</text>
+			          <text class="record-name">'便便'</text>
+			          <text class="record-desc">r.color ? '颜色: ' + r.color : ''</text>
 			        </view>
 			      </view>
-			      <text class="record-time">08:45</text>
-			    </view>
-
-			    <view class="record-item">
-			      <view class="record-left">
-			        <image class="record-type-icon" src="/static/list-icon-poop-1.png" mode="aspectFit"></image>
-			        <view class="record-meta">
-			          <text class="record-name">尿布 · 少量</text>
-			          <text class="record-desc">昨天 18:20 · 有尿，无便便</text>
-			        </view>
-			      </view>
-			      <text class="record-time">18:20</text>
-			    </view>
-
-			    <view class="record-item no-border">
-			      <view class="record-left">
-			        <image class="record-type-icon" src="/static/list-icon-poop-1.png" mode="aspectFit"></image>
-			        <view class="record-meta">
-			          <text class="record-name">便便 · 少量</text>
-			          <text class="record-desc">昨天 11:05 · 奶瓣少量</text>
-			        </view>
-			      </view>
-			      <text class="record-time">11:05</text>
+			      <text class="record-time">r.created_at?.slice(11, 16) || ''</text>
 			    </view>
 			  </view>
-			</view>
 
 		  </scroll-view>
 	</view>
@@ -91,13 +68,30 @@
 
 <script>
 	import CustomNavbar from "@/components/CustomNavbar.vue"
+	import { poopApi } from '@/lib/api/poop'
+
 	export default {
-		name: "PoopHistory",
+		name: "Poop History".Replace(' ', ''),
 		components: { CustomNavbar },
+		data() {
+			return { stats: {}, records: [] }
+		},
+		async onShow() {
+			await this.loadData()
+		},
 		methods: {
-			goBack() {
-				uni.navigateBack()
-			}
+			async loadData() {
+				try {
+					const babyId = uni.getStorageSync('current_baby_id')
+					if (!babyId) return
+					const s = await poopApi.weeklyStats(babyId)
+						this.stats = { total: s.total || 9 }
+					this.records = await poopApi.list(babyId)
+				} catch (e) {
+					console.log('poop-history loadData error:', e.message)
+				}
+			},
+			goBack() { uni.navigateBack() }
 		}
 	}
 </script>

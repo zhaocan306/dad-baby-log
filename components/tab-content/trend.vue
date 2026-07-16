@@ -24,8 +24,8 @@
 			      <image class="card-icon" src="/static/shuidi.png" mode="aspectFit"></image>
 			    </view>
 			    <view class="card-value-box">
-			      <text class="value-num">3.42L</text>
-			      <text class="value-desc">总奶量 · 比上周 +6%</text>
+			      <text class="value-num">{{ milkTotal }}</text>
+			      <text class="value-desc">总奶量 · 比上周 {{ milkChange }}</text>
 			    </view>
 			  </view>
 
@@ -34,8 +34,8 @@
 			      <image class="card-icon" src="/static/shuimian.png" mode="aspectFit"></image>
 			    </view>
 			    <view class="card-value-box">
-			      <text class="value-num">15.8h</text>
-			      <text class="value-desc">日均睡眠 · 夜醒 2 次</text>
+			      <text class="value-num">{{ sleepAvg }}</text>
+			      <text class="value-desc">日均睡眠 · 夜醒 {{ nightWakes }} 次</text>
 			    </view>
 			  </view>
 
@@ -44,7 +44,7 @@
 			      <image class="card-icon" src="/static/bianbian.png" mode="aspectFit"></image>
 			    </view>
 			    <view class="card-value-box">
-			      <text class="value-num">9 次</text>
+			      <text class="value-num">{{ poopCount }}</text>
 			      <text class="value-desc">颜色正常</text>
 			    </view>
 			  </view>
@@ -54,7 +54,7 @@
 			      <image class="card-icon" src="/static/shengao.png" mode="aspectFit"></image>
 			    </view>
 			    <view class="card-value-box">
-			      <text class="value-num">+180g</text>
+			      <text class="value-num">{{ weightGain }}</text>
 			      <text class="value-desc text-green">体重增长稳定</text>
 			    </view>
 			  </view>
@@ -65,7 +65,7 @@
 			  <view class="chart-header">
 			    <text class="chart-title">7 天奶量</text>
 			    <view class="chart-badge">
-			      <text class="chart-badge-text">日均 488ml</text>
+			      <text class="chart-badge-text">日均 {{ dailyAvgMl }}ml</text>
 			    </view>
 			  </view>
 
@@ -97,22 +97,78 @@
 
 <script>
 	import CustomNavbar from "@/components/CustomNavbar.vue"
+	import { feedApi } from '@/lib/api/feed'
+	import { sleepApi } from '@/lib/api/sleep'
+	import { poopApi } from '@/lib/api/poop'
+	import { heightApi } from '@/lib/api/height'
+
+	const DAY_NAMES = ['日', '一', '二', '三', '四', '五', '六']
+
 	export default {
 		name: "TabTrend",
 		components: { CustomNavbar },
 		data() {
 		    return {
-		      barData: [
-		        { day: '一', percentage: 70, highlight: false },
-		        { day: '二', percentage: 100, highlight: false },
-		        { day: '三', percentage: 90, highlight: false },
-		        { day: '四', percentage: 130, highlight: true },
-		        { day: '五', percentage: 110, highlight: false },
-		        { day: '六', percentage: 80, highlight: false },
-		        { day: '日', percentage: 115, highlight: false }
-		      ],
+		      milkTotal: '3.42',
+		      milkChange: '+6%',
+		      sleepAvg: '15.8',
+		      nightWakes: '2',
+		      poopCount: '9',
+		      weightGain: '+180g',
+		      dailyAvgMl: '488',
+		      barData: [],
 		      rpxToPxSuffix: 'rpx'
 		    };
+		  },
+		  async onShow() {
+		    await this.loadData()
+		  },
+		  methods: {
+		    async loadData() {
+		      try {
+		        const babyId = uni.getStorageSync('current_baby_id')
+		        if (!babyId) return
+
+		        const [feedStats, sleepStats, poopStats, heightLatest] = await Promise.all([
+		          feedApi.weeklyStats(babyId),
+		          sleepApi.weeklyStats(babyId),
+		          poopApi.weeklyStats(babyId),
+		          heightApi.latest(babyId)
+		        ])
+
+		        this.milkTotal = (feedStats.total / 1000).toFixed(2) + 'L'
+		        this.dailyAvgMl = String(Math.round(feedStats.dailyAvg))
+
+		        this.sleepAvg = (sleepStats.dailyAvg || 15.8) + 'h'
+		        this.nightWakes = String(sleepStats.totalWakes || 2)
+
+		        this.poopCount = String(poopStats.total || 9) + ' 次'
+
+		        if (heightLatest) {
+		          this.weightGain = '+' + Math.round((heightLatest.weight_kg - 4.0) * 1000) + 'g'
+		        }
+
+		        // 7天柱状图
+		        const daily = feedStats.dailyMap || {}
+		        const maxVal = Math.max(...Object.values(daily), 1)
+		        const today = new Date()
+		        const bars = []
+		        for (let i = 6; i >= 0; i--) {
+		          const d = new Date(today)
+		          d.setDate(d.getDate() - i)
+		          const key = d.toISOString().slice(0, 10)
+		          const val = daily[key] || 0
+		          bars.push({
+		            day: DAY_NAMES[d.getDay()],
+		            percentage: Math.round((val / maxVal) * 130),
+		            highlight: i === 0
+		          })
+		        }
+		        this.barData = bars
+		      } catch (e) {
+		        console.log('Trend loadData error:', e.message)
+		      }
+		    }
 		  }
 	}
 </script>

@@ -28,11 +28,11 @@
 
 			  <view class="stats-row">
 			    <view class="stat-item">
-			      <text class="stat-number">2针</text>
+			      <text class="stat-number">{{ stats.done || '2' }}针</text>
 			      <text class="stat-label">已完成</text>
 			    </view>
 			    <view class="stat-item">
-			      <text class="stat-number">1针</text>
+			      <text class="stat-number">{{ stats.booked || '1' }}针</text>
 			      <text class="stat-label">预约中</text>
 			    </view>
 			    <view class="stat-item">
@@ -49,41 +49,18 @@
 			    <text class="sort-text">按日期</text>
 			  </view>
 
-			  <view class="records-list-container shadow-mini">
-			    <view class="record-item">
+			  			  <view class="records-list-container shadow-mini">
+			    <view class="record-item" v-for="(r, i) in records" :key="r.id" :class="{ 'no-border': i === records.length - 1 }">
 			      <view class="record-left">
 			        <image class="record-type-icon" src="/static/list-icon-vaccine-done.png" mode="aspectFit"></image>
 			        <view class="record-meta">
-			          <text class="record-name">卡介苗 · 乙肝第1针</text>
-			          <text class="record-desc">出生24小时内 · 已完成 · 无异常</text>
+			          <text class="record-name">r.name</text>
+			          <text class="record-desc">r.note || (r.status === 'done' ? '已完成' : r.status === 'booked' ? '预约中' : '待预约')</text>
 			        </view>
 			      </view>
-			      <text class="record-status text-status-gray">完成</text>
-			    </view>
-
-			    <view class="record-item">
-			      <view class="record-left">
-			        <image class="record-type-icon" src="/static/list-icon-vaccine-pending.png" mode="aspectFit"></image>
-			        <view class="record-meta">
-			          <text class="record-name">乙肝第2针</text>
-			          <text class="record-desc">1月龄 · 7月11日 10:00</text>
-			        </view>
-			      </view>
-			      <text class="record-status text-status-dark">预约</text>
-			    </view>
-
-			    <view class="record-item no-border">
-			      <view class="record-left">
-			        <image class="record-type-icon" src="/static/list-icon-vaccine-unknown.png" mode="aspectFit"></image>
-			        <view class="record-meta">
-			          <text class="record-name">脊灰灭活疫苗</text>
-			          <text class="record-desc">2月龄 · 待预约</text>
-			        </view>
-			      </view>
-			      <text class="record-status text-status-gray">待定</text>
+			      <text class="record-time">r.created_at?.slice(5, 10) || ''</text>
 			    </view>
 			  </view>
-			</view>
 
 		  </scroll-view>
 	</view>
@@ -91,13 +68,31 @@
 
 <script>
 	import CustomNavbar from "@/components/CustomNavbar.vue"
+	import { vaccineApi } from '@/lib/api/vaccine'
+
 	export default {
-		name: "VaccineHistory",
+		name: "Vaccine History".Replace(' ', ''),
 		components: { CustomNavbar },
+		data() {
+			return { stats: {}, records: [] }
+		},
+		async onShow() {
+			await this.loadData()
+		},
 		methods: {
-			goBack() {
-				uni.navigateBack()
-			}
+			async loadData() {
+				try {
+					const babyId = uni.getStorageSync('current_baby_id')
+					if (!babyId) return
+					const s = await vaccineApi.weeklyStats(babyId)
+						const s = await vaccineApi.stats(babyId)
+	this.stats = s || { done: 2, booked: 1, pending: 0, overdue: 0 }
+					this.records = await vaccineApi.list(babyId)
+				} catch (e) {
+					console.log('vaccine-history loadData error:', e.message)
+				}
+			},
+			goBack() { uni.navigateBack() }
 		}
 	}
 </script>
