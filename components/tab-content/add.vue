@@ -33,14 +33,14 @@
 			  </view>
 
 			  <view class="counter-container">
-			    <view class="counter-btn-wrapper btn-minus">
+			    <view class="counter-btn-wrapper btn-minus" @tap="decrement">
 			      <text class="counter-symbol">—</text>
 			    </view>
 			    <view class="value-display">
-			      <text class="value-text">{{ currentConfig.value }}</text>
+			      <text class="value-text">{{ recordValue }}</text>
 			      <text class="value-unit" v-if="currentConfig.unit">{{ currentConfig.unit }}</text>
 			    </view>
-			    <view class="counter-btn-wrapper btn-plus">
+			    <view class="counter-btn-wrapper btn-plus" @tap="increment">
 			      <text class="counter-symbol">＋</text>
 			    </view>
 			  </view>
@@ -49,9 +49,10 @@
 			    <view
 			      v-for="(tag, idx) in currentConfig.tags"
 			      :key="idx"
-			      :class="['tag-item', idx === 0 ? 'tag-active-' + currentType : '']"
+			      @tap="selectedTag = tag"
+			      :class="['tag-item', selectedTag === tag ? 'tag-active-' + currentType : '', idx === 0 && !selectedTag ? 'tag-active-' + currentType : '']"
 			    >
-			      <text :class="['tag-text', idx === 0 ? 'text-active-' + currentType : '']">{{ tag }}</text>
+			      <text :class="['tag-text', selectedTag === tag ? 'text-active-' + currentType : '', idx === 0 && !selectedTag ? 'text-active-' + currentType : '']">{{ tag }}</text>
 			    </view>
 			  </view>
 
@@ -59,6 +60,7 @@
 			    <text class="memo-title">备注</text>
 			    <textarea
 			      class="memo-textarea"
+			      v-model="note"
 			      :placeholder="currentConfig.placeholder"
 			      placeholder-class="textarea-placeholder"
 			      fixed="true"
@@ -67,9 +69,9 @@
 			</view>
 
 			<!-- 4. 保存提交按钮区域 -->
-			<view class="save-button shadow-purple">
+			<view class="save-button shadow-purple" @tap="save">
 			  <image class="save-btn-icon" src="/static/icon-save-plus.png" mode="aspectFit"></image>
-			  <text class="save-btn-text">{{ currentConfig.btnText }}</text>
+			  <text class="save-btn-text">{{ saving ? '保存中...' : currentConfig.btnText }}</text>
 			</view>
 
 		  </scroll-view>
@@ -78,12 +80,29 @@
 
 <script>
 	import CustomNavbar from "@/components/CustomNavbar.vue"
+	import { feedApi } from '@/lib/api/feed'
+	import { sleepApi } from '@/lib/api/sleep'
+	import { poopApi } from '@/lib/api/poop'
+	import { heightApi } from '@/lib/api/height'
+	import { vaccineApi } from '@/lib/api/vaccine'
+
+	const apis = {
+	  milk: feedApi, poop: poopApi, sleep: sleepApi, height: heightApi, vaccine: vaccineApi
+	}
+
 	export default {
 		name: "TabAdd",
 		components: { CustomNavbar },
 		data() {
 		    return {
 		      currentType: 'milk',
+		      recordValue: '120',
+		      note: '',
+		      selectedTag: '',
+		      saving: false,
+		      recordValue: '120',
+		      note: '',
+		      saving: false,
 		      recordTypes: [
 		        { id: 'milk', name: '喝奶', icon: '/static/shuidi.png', activeIcon: '/static/shuidi_active.png' },
 		        { id: 'poop', name: '便便', icon: '/static/bianbian.png', activeIcon: '/static/bianbian_active.png' },
@@ -93,23 +112,23 @@
 		      ],
 		      formConfigs: {
 		        milk: {
-		          cardTitle: '本次奶量', timeText: '刚刚', value: '120', unit: 'ml',
+		          cardTitle: '本次奶量', timeText: '刚刚', defaultVal: '120', unit: 'ml', step: 10,
 		          tags: ['奶瓶', '亲喂', '配方奶'], placeholder: '吐奶、拍嗝、宝宝情绪都可以记在这里', btnText: '保存这次记录'
 		        },
 		        poop: {
-		          cardTitle: '本次便便', timeText: '08:45', value: '中', unit: '量',
+		          cardTitle: '本次便便', timeText: '08:45', defaultVal: '中', unit: '量', step: null,
 		          tags: ['黄金色', '软糊状', '尿布已换'], placeholder: '颜色、形态、是否有奶瓣或红屁屁都可以记在这里', btnText: '保存便便记录'
 		        },
 		        sleep: {
-		          cardTitle: '睡眠时长', timeText: '13:20 开始', value: '2.0', unit: '小时',
+		          cardTitle: '睡眠时长', timeText: '13:20 开始', defaultVal: '2.0', unit: '小时', step: 0.5,
 		          tags: ['日间小睡', '夜间睡眠', '安抚入睡'], placeholder: '入睡方式、是否夜醒、环境光线都可以记在这里', btnText: '保存睡眠记录'
 		        },
 		        height: {
-		          cardTitle: '成长测量', timeText: '今天', value: '52.4', unit: 'cm',
+		          cardTitle: '成长测量', timeText: '今天', defaultVal: '52.4', unit: 'cm', step: 0.1,
 		          tags: ['身高', '体重 4.1kg', '头围 37cm'], placeholder: '测量姿势、是否空腹、医生建议都可以记在这里', btnText: '保存成长记录'
 		        },
 		        vaccine: {
-		          cardTitle: '接种信息', timeText: '7月11日', value: '乙肝', unit: '第2针',
+		          cardTitle: '接种信息', timeText: '7月11日', defaultVal: '乙肝', unit: '第2针', step: null,
 		          tags: ['已预约', '已接种', '延后'], placeholder: '接种地点、批号、留观反应和体温变化都可以记在这里', btnText: '保存疫苗记录'
 		        }
 		      }
@@ -122,7 +141,75 @@
 		  },
 		  methods: {
 		    switchType(typeId) {
-		      this.currentType = typeId;
+		      this.currentType = typeId
+		      this.recordValue = this.formConfigs[typeId].defaultVal
+		      this.note = ''
+		    },
+		    increment() {
+		      const step = this.currentConfig.step
+		      if (!step) return
+		      this.recordValue = String(+(+this.recordValue + step).toFixed(1))
+		    },
+		    decrement() {
+		      const step = this.currentConfig.step
+		      if (!step) return
+		      const val = +this.recordValue - step
+		      if (val < 0) return
+		      this.recordValue = String(+val.toFixed(1))
+		    },
+		    async save() {
+		      if (this.saving) return
+		      this.saving = true
+		      try {
+		        const babyId = uni.getStorageSync('current_baby_id')
+		        if (!babyId) {
+		          uni.showToast({ title: '请先设置宝宝档案', icon: 'none' })
+		          return
+		        }
+		        const payload = { baby_id: babyId, note: this.note }
+		        const api = apis[this.currentType]
+
+		        switch (this.currentType) {
+		          case 'milk':
+		            Object.assign(payload, {
+		              type: this.selectedTag === '亲喂' ? 'breast' : this.selectedTag === '配方奶' ? 'formula' : 'bottle',
+		              amount_ml: +this.recordValue
+		            })
+		            break
+		          case 'poop':
+		            Object.assign(payload, {
+		              amount: this.recordValue === '少' ? 'little' : this.recordValue === '中' ? 'middle' : 'large',
+		              color: this.selectedTag || null, diaper_changed: true
+		            })
+		            break
+		          case 'sleep':
+		            Object.assign(payload, {
+		              type: this.selectedTag === '夜间睡眠' ? 'night' : this.selectedTag === '晨间回笼觉' ? 'morning' : 'nap',
+		              start_time: new Date().toISOString(),
+		              end_time: new Date(Date.now() + (+this.recordValue * 3600000)).toISOString()
+		            })
+		            break
+		          case 'height':
+		            Object.assign(payload, {
+		              height_cm: +this.recordValue, date: new Date().toISOString().slice(0, 10)
+		            })
+		            break
+		          case 'vaccine':
+		            Object.assign(payload, {
+		              name: this.recordValue, dose: this.currentConfig.unit,
+		              status: this.selectedTag === '已接种' ? 'done' : this.selectedTag === '已预约' ? 'booked' : 'pending'
+		            })
+		            break
+		        }
+
+		        await api.create(payload)
+		        uni.showToast({ title: '保存成功', icon: 'success' })
+		        this.switchType(this.currentType)
+		      } catch (e) {
+		        uni.showToast({ title: '保存失败: ' + e.message, icon: 'none' })
+		      } finally {
+		        this.saving = false
+		      }
 		    }
 		  }
 	}

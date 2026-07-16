@@ -3,3 +3,10 @@ unpackage/
 .hbuilderx/
 font_base64.txt
 font.data.js
+
+# 环境变量
+.env
+.env.local
+
+# 微信私钥
+private.*.key

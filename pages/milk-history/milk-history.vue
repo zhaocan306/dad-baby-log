@@ -28,15 +28,15 @@
 
 			  <view class="stats-row">
 			    <view class="stat-item">
-			      <text class="stat-number">3.42L</text>
+			      <text class="stat-number">{{ stats.total }}L</text>
 			      <text class="stat-label">总量</text>
 			    </view>
 			    <view class="stat-item">
-			      <text class="stat-number">488ml</text>
+			      <text class="stat-number">{{ stats.dailyAvg }}ml</text>
 			      <text class="stat-label">日均</text>
 			    </view>
 			    <view class="stat-item">
-			      <text class="stat-number">28次</text>
+			      <text class="stat-number">{{ stats.count }}次</text>
 			      <text class="stat-label">喂养</text>
 			    </view>
 			  </view>
@@ -50,37 +50,15 @@
 			  </view>
 
 			  <view class="records-list-container shadow-mini">
-			    <view class="record-item">
+			    <view class="record-item" v-for="(r, i) in records" :key="r.id" :class="{ 'no-border': i === records.length - 1 }">
 			      <view class="record-left">
 			        <image class="record-type-icon" src="/static/list-icon-milk-1.png" mode="aspectFit"></image>
 			        <view class="record-meta">
-			          <text class="record-name">奶瓶喂养 · 120ml</text>
-			          <text class="record-desc">今天 09:20 · 左侧拍嗝 6 分钟</text>
+			          <text class="record-name">{{ r.type === 'breast' ? '亲喂' : r.type === 'formula' ? '配方奶' : '奶瓶喂养' }} · {{ r.amount_ml || '' }}ml</text>
+			          <text class="record-desc">{{ r.created_at?.slice(11, 16) || '' }} · {{ r.note || '' }}</text>
 			        </view>
 			      </view>
-			      <text class="record-time">09:20</text>
-			    </view>
-
-			    <view class="record-item">
-			      <view class="record-left">
-			        <image class="record-type-icon" src="/static/list-icon-milk-1.png" mode="aspectFit"></image>
-			        <view class="record-meta">
-			          <text class="record-name">亲喂 · 18 分钟</text>
-			          <text class="record-desc">昨天 23:10 · 右侧 10 分钟</text>
-			        </view>
-			      </view>
-			      <text class="record-time">23:10</text>
-			    </view>
-
-			    <view class="record-item no-border">
-			      <view class="record-left">
-			        <image class="record-type-icon" src="/static/list-icon-milk-1.png" mode="aspectFit"></image>
-			        <view class="record-meta">
-			          <text class="record-name">配方奶 · 100ml</text>
-			          <text class="record-desc">昨天 19:40 · 吃完后小睡</text>
-			        </view>
-			      </view>
-			      <text class="record-time">19:40</text>
+			      <text class="record-time">{{ r.created_at?.slice(11, 16) || '' }}</text>
 			    </view>
 			  </view>
 			</view>
@@ -91,13 +69,37 @@
 
 <script>
 	import CustomNavbar from "@/components/CustomNavbar.vue"
+	import { feedApi } from '@/lib/api/feed'
+
 	export default {
 		name: "MilkHistory",
 		components: { CustomNavbar },
-		methods: {
-			goBack() {
-				uni.navigateBack()
+		data() {
+			return {
+				stats: { total: '3.42', dailyAvg: '488', count: 28 },
+				records: []
 			}
+		},
+		async onShow() {
+			await this.loadData()
+		},
+		methods: {
+			async loadData() {
+				try {
+					const babyId = uni.getStorageSync('current_baby_id')
+					if (!babyId) return
+					const s = await feedApi.weeklyStats(babyId)
+					this.stats = {
+						total: (s.total / 1000).toFixed(2),
+						dailyAvg: String(Math.round(s.dailyAvg)),
+						count: s.count
+					}
+					this.records = await feedApi.list(babyId)
+				} catch (e) {
+					console.log('MilkHistory loadData error:', e.message)
+				}
+			},
+			goBack() { uni.navigateBack() }
 		}
 	}
 </script>
