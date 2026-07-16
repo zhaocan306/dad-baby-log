@@ -129,14 +129,14 @@
 		--card-vaccine: #FFF6D6;
 		--baby-purple: #8B80F9;
 
-		min-height: 100vh;
+		height: 100vh;
 		background-color: var(--bg-cream);
 		color: var(--text-dark);
 	}
 
 	.inner-padding {
-	  padding: 0 44rpx;
 	  height: 100%;
+	  padding: 0 44rpx;
 	  width: calc(100% - 88rpx);
 	}
 

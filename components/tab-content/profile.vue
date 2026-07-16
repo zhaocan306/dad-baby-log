@@ -120,7 +120,7 @@
 <script>
 	import CustomNavbar from "@/components/CustomNavbar.vue"
 	export default {
-		name: "TabMessage",
+		name: "TabProfile",
 		components: { CustomNavbar }
 	}
 </script>
@@ -137,14 +137,14 @@
 		--card-vaccine: #FFF6D6;
 		--baby-purple: #8B80F9;
 
-		height: 100vh;
+		min-height: 100vh;
 		background-color: var(--bg-cream);
 		color: var(--text-dark);
 	}
 
 	.inner-padding {
-	  height: 100%;
 	  padding: 0 44rpx;
+	  height: 100%;
 	  width: calc(100% - 88rpx);
 	}
 

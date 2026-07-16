@@ -1,8 +1,6 @@
 /* ===== 页面基础 ===== */
 .page {
-	display: flex;
-	flex-direction: column;
-	height: 100vh;
+	height: calc(100vh - 160rpx);
 }
 
 /* ===== 奶量卡片 ===== */
@@ -260,4 +258,110 @@
 .grid-card__poop-img {
 	width: 100%;
 	height: 100%;
+}
+
+/* ===== 最近活动列表 ===== */
+.recent-activities {
+	margin: 20rpx 40rpx;
+}
+
+.recent-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 24rpx;
+}
+
+.recent-header .section-title {
+	font-size: 36rpx;
+	font-weight: 900;
+}
+
+.btn-all-wrapper {
+	background-color: #FFFFFF;
+	padding: 8rpx 28rpx;
+	border-radius: 100rpx;
+	box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.015);
+	border: 1px solid rgba(142, 138, 159, 0.08);
+	display: flex;
+	align-items: center;
+}
+
+.btn-text {
+	font-size: 22rpx;
+	font-weight: 800;
+	color: var(--baby-purple, #8B80F9);
+}
+
+.activity-list {
+	display: flex;
+	flex-direction: column;
+}
+
+.activity-item {
+	background-color: #FFFFFF;
+	border-radius: 40rpx;
+	padding: 30rpx;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20rpx;
+	border: 1px solid rgba(243, 241, 255, 0.5);
+	box-sizing: border-box;
+}
+
+.activity-item:last-child {
+	margin-bottom: 0;
+}
+
+.shadow-mini {
+	box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.01);
+}
+
+.activity-left {
+	display: flex;
+	align-items: center;
+}
+
+.activity-icon-img {
+	width: 80rpx;
+	height: 80rpx;
+	margin-right: 24rpx;
+}
+
+.activity-meta {
+	display: flex;
+	flex-direction: column;
+}
+
+.activity-name {
+	font-size: 28rpx;
+	font-weight: 800;
+}
+
+.activity-desc {
+	font-size: 22rpx;
+	color: #8E8A9F;
+	font-weight: 600;
+	margin-top: 4rpx;
+}
+
+.activity-time {
+	font-size: 24rpx;
+	font-weight: 700;
+	color: #8E8A9F;
+}
+
+/* ===== 底部提示 ===== */
+.footer-tip {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 40rpx 0;
+}
+
+.footer-tip-text {
+	font-size: 24rpx;
+	color: #8E8A9F;
+	font-weight: 600;
 }
