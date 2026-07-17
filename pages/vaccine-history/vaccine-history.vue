@@ -85,9 +85,8 @@
 				try {
 					const babyId = uni.getStorageSync('current_baby_id')
 					if (!babyId) return
-					const s = await vaccineApi.weeklyStats(babyId)
-						const s = await vaccineApi.stats(babyId)
-	this.stats = s || { done: 2, booked: 1, pending: 0, overdue: 0 }
+					const s = await vaccineApi.stats(babyId)
+					this.stats = s || { done: 2, booked: 1, pending: 0, overdue: 0 }
 					this.records = await vaccineApi.list(babyId)
 				} catch (e) {
 					console.log('vaccine-history loadData error:', e.message)
