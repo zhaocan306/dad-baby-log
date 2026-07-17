@@ -1,0 +1,10 @@
+<view class="tabbar-wrapper">
+  <view class="custom-tabbar">
+    <view wx:for="{{tabs}}" wx:key="name" class="tab-item {{current === item.name ? 'active' : ''}} {{item.name === 'add' ? 'add' : ''}}" bindtap="onTabClick" data-name="{{item.name}}">
+      <view wx:if="{{current === item.name && item.name !== 'add'}}" class="active-bg"></view>
+      <view wx:elif="{{item.name === 'add'}}" class="add-bg {{current === item.name ? 'add-active' : ''}}"></view>
+      <image src="{{current === item.name ? item.activeIcon : item.icon}}" mode="aspectFit" class="tab-icon" />
+    </view>
+  </view>
+  <view class="safe-area-spacer"></view>
+</view>

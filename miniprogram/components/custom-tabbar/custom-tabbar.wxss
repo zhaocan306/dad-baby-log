@@ -1,0 +1,10 @@
+.tabbar-wrapper{position:fixed;bottom:0;left:0;right:0;z-index:5;display:flex;flex-direction:column;align-items:center}
+.custom-tabbar{box-sizing:border-box;width:390px;height:78px;display:flex;justify-content:space-between;align-items:center;padding:12px 22px;background-color:#fff;border-radius:34px 34px 0 0}
+.safe-area-spacer{width:100%;height:12px;background-color:#fff}
+.tab-item{position:relative;display:flex;justify-content:center;align-items:center;width:48px;height:42px}
+.tab-item.add{width:54px;height:42px}
+.add-bg,.active-bg{position:absolute;display:flex;justify-content:center;align-items:center;padding:0;border-radius:100px}
+.add-bg{width:54px;height:42px;background-color:#f2f0ff}
+.add-bg.add-active{background-color:#9b97df}
+.active-bg{width:58px;height:42px;background-color:#9b97df}
+.tab-icon{width:28px;height:28px;position:relative;z-index:1}

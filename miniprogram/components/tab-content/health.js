@@ -1,17 +1,16 @@
-const { query, callFunction, _ } = require('../../utils/cloud')
+﻿const { query, callFunction, _ } = require('../../utils/cloud')
 
-Page({
-  data: {
+Component({{
+  properties: { current: { type: String, value: "" } }, data: {
     nextVaccine: null,
     milestones: [],
-    vaccineName: '暂无',
+    vaccineName: '鏆傛棤',
     vaccineDetails: '',
     vaccineCountdown: '--'
   },
-  onLoad() {
+  lifetimes: { attached() {
     this.loadData()
-  },
-  async loadData() {
+  }, methods: { async loadData() {
     try {
       const babyId = wx.getStorageSync('current_baby_id')
       if (!babyId) return
@@ -32,9 +31,9 @@ Page({
         const v = vaccines[0]
         const days = Math.ceil((new Date(v.due_date) - new Date()) / 86400000)
         this.setData({
-          vaccineName: v.name || '乙肝疫苗第 2 针',
+          vaccineName: v.name || '涔欒倽鐤嫍绗?2 閽?,
           vaccineDetails: (v.appointment_at || '').replace('T', ' ') + ' ' + (v.location || ''),
-          vaccineCountdown: '还剩 ' + days + ' 天'
+          vaccineCountdown: '杩樺墿 ' + days + ' 澶?
         })
       }
     } catch (e) {
@@ -42,3 +41,5 @@ Page({
     }
   }
 })
+
+
