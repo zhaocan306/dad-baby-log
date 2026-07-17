@@ -1,1 +1,49 @@
-<view class="page"><custom-navbar u-i="cd49d15e-0" bind:__l="__l"/><scroll-view class="inner-padding" scroll-y><view class="title-row"><text class="title-main">新增记录</text><image class="notif-btn-icon" src="{{a}}" mode="aspectFit"></image></view><view class="tabs-row"><view wx:for="{{b}}" wx:for-item="tab" wx:key="d" bindtap="{{tab.e}}" class="{{['tab-item-box', tab.f]}}"><image class="tab-icon" src="{{tab.a}}" mode="aspectFit"></image><text class="{{['tab-text', tab.c]}}">{{tab.b}}</text></view></view><view class="{{['form-card', 'shadow-soft', k]}}"><view class="form-card-header"><text class="form-card-title">{{c}}</text><view class="time-badge"><image class="time-icon" src="{{d}}" mode="aspectFit"></image><text class="time-badge-text">{{e}}</text></view></view><view class="counter-container"><view class="counter-btn-wrapper btn-minus"><text class="counter-symbol">—</text></view><view class="value-display"><text class="value-text">{{f}}</text><text wx:if="{{g}}" class="value-unit">{{h}}</text></view><view class="counter-btn-wrapper btn-plus"><text class="counter-symbol">＋</text></view></view><view class="tags-group-row"><view wx:for="{{i}}" wx:for-item="tag" wx:key="c" class="{{['tag-item', tag.d]}}"><text class="{{['tag-text', tag.b]}}">{{tag.a}}</text></view></view><view class="memo-area-box"><text class="memo-title">备注</text><textarea class="memo-textarea" placeholder="{{j}}" placeholder-class="textarea-placeholder" fixed="true"/></view></view><view class="save-button shadow-purple"><image class="save-btn-icon" src="{{l}}" mode="aspectFit"></image><text class="save-btn-text">{{m}}</text></view></scroll-view></view>
+﻿<view class="page">
+  <custom-navbar />
+  <scroll-view class="inner-padding" scroll-y>
+    <view class="title-row">
+      <text class="title-main">新增记录</text>
+      <image class="notif-btn-icon" src="/static/icon-bell-purple.png" mode="aspectFit" />
+    </view>
+    <view class="tabs-row">
+      <view wx:for="{{recordTypes}}" wx:key="id" wx:for-item="tab" bindtap="switchType" data-id="{{tab.id}}" class="tab-item-box {{currentType === tab.id ? 'active-tab-' + tab.id : ''}}">
+        <image class="tab-icon" src="{{currentType === tab.id ? tab.activeIcon : tab.icon}}" mode="aspectFit" />
+        <text class="tab-text {{currentType === tab.id ? 'text-white-force' : ''}}">{{tab.name}}</text>
+      </view>
+    </view>
+    <view class="form-card shadow-soft {{'bg-card-' + currentType}}">
+      <view class="form-card-header">
+        <text class="form-card-title">{{currentConfig.cardTitle}}</text>
+        <view class="time-badge">
+          <image class="time-icon" src="/static/icon-time-clock.png" mode="aspectFit" />
+          <text class="time-badge-text">{{currentConfig.timeText}}</text>
+        </view>
+      </view>
+      <view class="counter-container">
+        <view class="counter-btn-wrapper btn-minus" bindtap="decrement">
+          <text class="counter-symbol">—</text>
+        </view>
+        <view class="value-display">
+          <text class="value-text">{{recordValue}}</text>
+          <text class="value-unit" wx:if="{{currentConfig.unit}}">{{currentConfig.unit}}</text>
+        </view>
+        <view class="counter-btn-wrapper btn-plus" bindtap="increment">
+          <text class="counter-symbol">＋</text>
+        </view>
+      </view>
+      <view class="tags-group-row">
+        <view wx:for="{{currentConfig.tags}}" wx:key="*this" wx:for-item="tag" bindtap="selectTag" data-tag="{{tag}}" class="tag-item {{selectedTag === tag ? 'tag-active-' + currentType : ''}}">
+          <text class="tag-text {{selectedTag === tag ? 'text-active-' + currentType : ''}}">{{tag}}</text>
+        </view>
+      </view>
+      <view class="memo-area-box">
+        <text class="memo-title">备注</text>
+        <textarea class="memo-textarea" placeholder="{{currentConfig.placeholder}}" placeholder-class="textarea-placeholder" fixed="true" bindinput="onNoteInput" value="{{note}}" />
+      </view>
+    </view>
+    <view class="save-button shadow-purple" bindtap="save">
+      <image class="save-btn-icon" src="/static/icon-save-plus.png" mode="aspectFit" />
+      <text class="save-btn-text">{{saving ? "保存中..." : currentConfig.btnText}}</text>
+    </view>
+  </scroll-view>
+</view>

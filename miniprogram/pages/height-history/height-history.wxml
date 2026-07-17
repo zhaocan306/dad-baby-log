@@ -1,1 +1,49 @@
-<view class="page"><custom-navbar wx:if="{{b}}" bindback="{{a}}" u-i="2ea027bd-0" bind:__l="__l" u-p="{{b}}"/><scroll-view class="inner-padding" scroll-y><view class="header-section"><view class="title-text-group"><text class="title-main">身高历史</text><text class="title-sub">查看身高、体重、头围增长轨迹</text></view><view class="time-badge"><text class="badge-text">7天</text></view></view><view class="card-height-summary shadow-soft"><view class="card-header"><view class="title-with-icon"><image class="summary-card-icon" src="{{c}}" mode="aspectFit"></image><text class="card-title text-green">成长记录</text></view><view class="status-badge"><text class="status-badge-text">稳定</text></view></view><view class="stats-row"><view class="stat-item"><text class="stat-number text-green">52.4</text><text class="stat-label text-green-light">身高cm</text></view><view class="stat-item"><text class="stat-number text-green">4.1kg</text><text class="stat-label text-green-light">体重</text></view><view class="stat-item"><text class="stat-number text-green">37cm</text><text class="stat-label text-green-light">头围</text></view></view></view><view class="recent-records-section"><view class="records-header"><text class="section-title">最近记录</text><text class="sort-text">按日期</text></view><view class="records-list-container shadow-mini"><view class="record-item"><view class="record-left"><image class="record-type-icon" src="{{d}}" mode="aspectFit"></image><view class="record-meta"><text class="record-name">身高 52.4cm · 体重 4.1kg</text><text class="record-desc">今天 · 头围 37cm · 本周 +180g</text></view></view><text class="record-time">今天</text></view><view class="record-item"><view class="record-left"><image class="record-type-icon" src="{{e}}" mode="aspectFit"></image><view class="record-meta"><text class="record-name">身高 51.8cm · 体重 3.92kg</text><text class="record-desc">7月2日 · 医生评估正常</text></view></view><text class="record-time">7/2</text></view><view class="record-item no-border"><view class="record-left"><image class="record-type-icon" src="{{f}}" mode="aspectFit"></image><view class="record-meta"><text class="record-name">出生记录 · 50.0cm</text><text class="record-desc">6月10日 · 体重 3.3kg</text></view></view><text class="record-time">出生</text></view></view></view></scroll-view></view>
+﻿<view class="page">
+  <custom-navbar showBack="{{true}}" bindback="goBack" />
+  <scroll-view class="inner-padding" scroll-y>
+    <view class="header-section">
+      <view class="title-text-group">
+        <text class="title-main">身高历史</text>
+        <text class="title-sub">查看身高、体重、头围增长轨迹</text>
+      </view>
+      <view class="time-badge">
+        <text class="badge-text">7天</text>
+      </view>
+    </view>
+    <view class="card-height-summary shadow-soft">
+      <view class="card-header">
+        <view class="title-with-icon">
+          <image class="summary-card-icon" src="/static/icon-height-chart.png" mode="aspectFit" />
+          <text class="card-title">成长记录</text>
+        </view>
+        <view class="status-badge">
+          <text class="status-badge-text">稳定</text>
+        </view>
+      </view>
+      <view class="stats-row">
+<view class="stat-item"><text class="stat-number text-green">{{stats.height_cm || 52.4}}</text><text class="stat-label text-green-light">身高cm</text></view>
+        <view class="stat-item"><text class="stat-number text-green">{{stats.weight_kg || 4.1}}kg</text><text class="stat-label text-green-light">体重</text></view>
+        <view class="stat-item"><text class="stat-number text-green">{{stats.head_cm || 37}}cm</text><text class="stat-label text-green-light">头围</text></view>
+      </view>
+    </view>
+    <view class="recent-records-section">
+      <view class="records-header">
+        <text class="section-title">最近记录</text>
+        <text class="sort-text">按日期</text>
+      </view>
+      <view class="records-list-container shadow-mini">
+        <view class="record-item" wx:for="{{records}}" wx:key="id" wx:for-item="r">
+          <view class="record-left">
+            <image class="record-type-icon" src="/static/list-icon-height.png" mode="aspectFit" />
+            <view class="record-meta">
+              <text class="record-name">{{r.name}}</text>
+              <text class="record-desc">{{r.note}}</text>
+            </view>
+          </view>
+          <text class="record-time">{{r.date || ""}}</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>
+
