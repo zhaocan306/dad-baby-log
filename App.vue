@@ -1,44 +1,30 @@
 <script>
+	import { initCloud } from '@/lib/cloud'
+
 	export default {
-		onLaunch: function() {
-			// #ifdef MP-WEIXIN
-			uni.loadFontFace({
-				family: 'MarukoGothicCJKsc',
-				source: 'url("https://cdn.jsdelivr.net/gh/max32002/maruko-gothic@main/webfont/CJK%20SC/MarukoGothicCJKsc-Regular.woff2")',
-				global: true,
-				success: () => console.log('Maruko Gothic loaded'),
-				fail: (err) => console.log('Maruko Gothic failed', err)
-			})
-			// #endif
+		async onLaunch() {
+			try {
+				await initCloud()
+				console.log('Cloud initialized')
+				// 自动获取用户 openid 存入缓存
+				const { result } = await wx.cloud.callFunction({ name: 'init' })
+				if (result?.babyId) {
+					uni.setStorageSync('current_baby_id', result.babyId)
+				}
+			} catch (e) {
+				console.log('Cloud init error:', e)
+			}
 		},
-		onShow: function() {
+		onShow() {
 			console.log('App Show')
 		},
-		onHide: function() {
+		onHide() {
 			console.log('App Hide')
 		}
 	}
 </script>
 
 <style>
-	@font-face {
-		font-family: 'MarukoGothicCJKsc';
-		src: url('https://cdn.jsdelivr.net/gh/max32002/maruko-gothic@main/webfont/CJK%20SC/MarukoGothicCJKsc-Regular.woff2') format('woff2');
-		font-weight: 400;
-		font-display: swap;
-	}
-	@font-face {
-		font-family: 'MarukoGothicCJKsc';
-		src: url('https://cdn.jsdelivr.net/gh/max32002/maruko-gothic@main/webfont/CJK%20SC/MarukoGothicCJKsc-Medium.woff2') format('woff2');
-		font-weight: 500;
-		font-display: swap;
-	}
-	@font-face {
-		font-family: 'MarukoGothicCJKsc';
-		src: url('https://cdn.jsdelivr.net/gh/max32002/maruko-gothic@main/webfont/CJK%20SC/MarukoGothicCJKsc-Light.woff2') format('woff2');
-		font-weight: 300;
-		font-display: swap;
-	}
 	page {
 		font-family: 'MarukoGothicCJKsc', 'Zen Maru Gothic', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
 		background-color: #fffdf8;
