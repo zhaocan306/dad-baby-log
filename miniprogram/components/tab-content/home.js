@@ -1,4 +1,4 @@
-﻿const { query, callFunction, _ } = require('../../utils/cloud')
+const { query, callFunction, _ } = require('../../utils/cloud')
 Component({
   properties: { current: { type: String, value: '' } },
   data: {
