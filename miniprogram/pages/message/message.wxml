@@ -1,0 +1,36 @@
+﻿<view class="page">
+  <custom-navbar />
+  <scroll-view class="inner-padding" scroll-y>
+    <view class="header-section">
+      <view class="title-text-group">
+        <text class="title-main">我的</text>
+        <text class="title-sub">管理宝宝档案、家庭协作和数据</text>
+      </view>
+      <image class="header-setting-icon" src="/static/icon-setting.png" mode="aspectFit" />
+    </view>
+    <view class="card-family shadow-soft">
+      <view class="profile-info-row">
+        <image class="family-avatar" src="/static/family-avatar.png" mode="aspectFit" />
+        <view class="profile-meta">
+          <text class="family-name">{{familyName}} 的家庭</text>
+          <text class="baby-detail">{{babyDetail}}</text>
+          <view class="member-badge">
+            <image class="member-badge-icon" src="/static/icon-group.png" mode="aspectFit" />
+            <text class="member-badge-text">{{memberCount}} 位家人同步记录</text>
+          </view>
+        </view>
+      </view>
+      <view class="stats-row">
+        <view class="stat-item"><text class="stat-number">{{daysOld}}</text><text class="stat-label">记录天</text></view>
+        <view class="stat-item"><text class="stat-number">{{totalRecords}}</text><text class="stat-label">条记录</text></view>
+        <view class="stat-item"><text class="stat-number text-green">已同步</text><text class="stat-label text-green-light">云备份</text></view>
+      </view>
+    </view>
+    <view class="grid-4 mb-6">
+      <view class="menu-card shadow-mini"><image class="menu-icon" src="/static/menu-baby.png" mode="aspectFit" /><text class="menu-label">宝宝档案</text></view>
+      <view class="menu-card shadow-mini"><image class="menu-icon" src="/static/menu-members.png" mode="aspectFit" /><text class="menu-label">家庭成员</text></view>
+      <view class="menu-card shadow-mini"><image class="menu-icon" src="/static/menu-notif.png" mode="aspectFit" /><text class="menu-label">提醒设置</text></view>
+      <view class="menu-card shadow-mini"><image class="menu-icon" src="/static/menu-export.png" mode="aspectFit" /><text class="menu-label">数据导出</text></view>
+    </view>
+  </scroll-view>
+</view>

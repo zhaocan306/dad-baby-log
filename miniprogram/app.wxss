@@ -1,0 +1,5 @@
+page {
+  font-family: 'MarukoGothicCJKsc', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  background-color: #FAF9F5;
+  -webkit-tap-highlight-color: transparent;
+}

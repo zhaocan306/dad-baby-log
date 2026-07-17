@@ -1,0 +1,18 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/poop-history/poop-history",
+    "pages/milk-history/milk-history",
+    "pages/height-history/height-history",
+    "pages/sleep-history/sleep-history",
+    "pages/vaccine-history/vaccine-history",
+    "pages/vaccine-schedule/vaccine-schedule"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "usingComponents": {}
+}

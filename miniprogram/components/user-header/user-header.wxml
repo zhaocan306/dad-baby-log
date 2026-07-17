@@ -1,0 +1,12 @@
+﻿<view class="header">
+  <view class="flex">
+    <image class="header-img" src="/static/header.png" mode="aspectFit" />
+    <view class="header-detail">
+      <text class="header-detail-name">{{name}}</text>
+      <text class="header-detail-tip">{{tip}}</text>
+    </view>
+  </view>
+  <view class="header-notice">
+    <image class="header-notice-img" src="/static/notice.png" mode="aspectFit" />
+  </view>
+</view>

@@ -1,0 +1,9 @@
+﻿<view class="custom-navbar">
+  <view class="nav-left">
+    <image wx:if="{{showBack}}" src="/static/back.png" mode="aspectFit" class="back-icon" bindtap="onBack" />
+  </view>
+  <view class="nav-center">
+    <text wx:if="{{title}}" class="nav-title">{{title}}</text>
+  </view>
+  <view class="nav-right"></view>
+</view>
