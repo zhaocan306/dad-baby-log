@@ -54,15 +54,16 @@
 			      <view class="record-left">
 			        <image class="record-type-icon" src="/static/list-icon-vaccine-done.png" mode="aspectFit"></image>
 			        <view class="record-meta">
-			          <text class="record-name">r.name</text>
-			          <text class="record-desc">r.note || (r.status === 'done' ? '已完成' : r.status === 'booked' ? '预约中' : '待预约')</text>
+			          <text class="record-name">{{ r.name }}</text>
+			          <text class="record-desc">{{ r.note || (r.status === 'done' ? '已完成' : r.status === 'booked' ? '预约中' : '待预约') }}</text>
 			        </view>
 			      </view>
-			      <text class="record-time">r.created_at?.slice(5, 10) || ''</text>
+			      <text class="record-time">{{ r.created_at?.slice(5, 10) || '' }}</text>
 			    </view>
 			  </view>
 
-		  </scroll-view>
+		  		</view>
+</scroll-view>
 	</view>
 </template>
 
@@ -71,7 +72,7 @@
 	import { vaccineApi } from '@/lib/api/vaccine'
 
 	export default {
-		name: "Vaccine History".Replace(' ', ''),
+		name: "VaccineHistory",
 		components: { CustomNavbar },
 		data() {
 			return { stats: {}, records: [] }

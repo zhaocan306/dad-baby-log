@@ -62,7 +62,8 @@
 			    </view>
 			  </view>
 
-		  </scroll-view>
+		  		</view>
+</scroll-view>
 	</view>
 </template>
 
@@ -71,7 +72,7 @@
 	import { sleepApi } from '@/lib/api/sleep'
 
 	export default {
-		name: "Sleep History".Replace(' ', ''),
+		name: "SleepHistory",
 		components: { CustomNavbar },
 		data() {
 			return { stats: {}, records: [] }

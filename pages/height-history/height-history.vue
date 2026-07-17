@@ -28,15 +28,15 @@
 
 			  <view class="stats-row">
 			    <view class="stat-item">
-			      <text class="stat-number text-green">52.4</text>
+			      <text class="stat-number text-green">{{ stats.height_cm || '52.4' }}</text>
 			      <text class="stat-label text-green-light">身高cm</text>
 			    </view>
 			    <view class="stat-item">
-			      <text class="stat-number text-green">4.1kg</text>
+			      <text class="stat-number text-green">{{ stats.weight_kg || '4.1' }}kg</text>
 			      <text class="stat-label text-green-light">体重</text>
 			    </view>
 			    <view class="stat-item">
-			      <text class="stat-number text-green">37cm</text>
+			      <text class="stat-number text-green">{{ stats.head_cm || '37' }}cm</text>
 			      <text class="stat-label text-green-light">头围</text>
 			    </view>
 			  </view>
@@ -49,20 +49,21 @@
 			    <text class="sort-text">按日期</text>
 			  </view>
 
-			  			  <view class="records-list-container shadow-mini">
+			  <view class="records-list-container shadow-mini">
 			    <view class="record-item" v-for="(r, i) in records" :key="r.id" :class="{ 'no-border': i === records.length - 1 }">
 			      <view class="record-left">
 			        <image class="record-type-icon" src="/static/list-icon-height.png" mode="aspectFit"></image>
 			        <view class="record-meta">
-			          <text class="record-name">'身高 ' + r.height_cm + 'cm · 体重 ' + r.weight_kg + 'kg'</text>
-			          <text class="record-desc">r.date || ''</text>
+			          <text class="record-name">{{ '身高 ' + r.height_cm + 'cm · 体重 ' + r.weight_kg + 'kg' }}</text>
+			          <text class="record-desc">{{ r.date || '' }}</text>
 			        </view>
 			      </view>
-			      <text class="record-time">r.date?.slice(5) || ''</text>
+			      <text class="record-time">{{ r.date?.slice(5) || '' }}</text>
 			    </view>
 			  </view>
 
-		  </scroll-view>
+		  		</view>
+</scroll-view>
 	</view>
 </template>
 
@@ -71,7 +72,7 @@
 	import { heightApi } from '@/lib/api/height'
 
 	export default {
-		name: "Height History".Replace(' ', ''),
+		name: "HeightHistory",
 		components: { CustomNavbar },
 		data() {
 			return { stats: {}, records: [] }
@@ -84,9 +85,8 @@
 				try {
 					const babyId = uni.getStorageSync('current_baby_id')
 					if (!babyId) return
-					const s = await heightApi.weeklyStats(babyId)
-						const latest = await heightApi.latest(babyId)
-	this.stats = latest || { height_cm: 52.4, weight_kg: 4.1, head_cm: 37 }
+					const latest = await heightApi.latest(babyId)
+					this.stats = latest || { height_cm: 52.4, weight_kg: 4.1, head_cm: 37 }
 					this.records = await heightApi.list(babyId)
 				} catch (e) {
 					console.log('height-history loadData error:', e.message)

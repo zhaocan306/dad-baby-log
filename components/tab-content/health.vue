@@ -32,7 +32,7 @@
 			    </view>
 			    <view class="vaccine-info-meta">
 			      <text class="vaccine-name">{{ nextVaccine?.name || '暂无' }}</text>
-			      <text class="vaccine-details">{{ nextVaccine?.appointment_at?.slice(0, 16)?.replace('T', ' ') || '' }} {{ nextVaccine?.location || '' }}</text>
+			      <text class="TabHealth"('T', ' ') || '' }} {{ nextVaccine?.location || '' }}</text>
 			    </view>
 			  </view>
 			</view>

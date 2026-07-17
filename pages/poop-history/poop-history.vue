@@ -55,14 +55,15 @@
 			        <image class="record-type-icon" src="/static/list-icon-poop-1.png" mode="aspectFit"></image>
 			        <view class="record-meta">
 			          <text class="record-name">'便便'</text>
-			          <text class="record-desc">r.color ? '颜色: ' + r.color : ''</text>
+			          <text class="record-desc">{{ r.color ? '颜色: ' + r.color : (r.note || '') }}</text>
 			        </view>
 			      </view>
-			      <text class="record-time">r.created_at?.slice(11, 16) || ''</text>
+			      <text class="record-time">{{ r.created_at?.slice(11, 16) || '' }}</text>
 			    </view>
 			  </view>
 
-		  </scroll-view>
+		  		</view>
+</scroll-view>
 	</view>
 </template>
 
@@ -71,7 +72,7 @@
 	import { poopApi } from '@/lib/api/poop'
 
 	export default {
-		name: "Poop History".Replace(' ', ''),
+		name: "PoopHistory",
 		components: { CustomNavbar },
 		data() {
 			return { stats: {}, records: [] }
