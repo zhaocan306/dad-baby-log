@@ -1,1 +1,369 @@
-.container{position:relative;width:100%;min-height:100vh}
+﻿.page{height:calc(100vh - 160rpx)}.milk-card{height:360rpx;margin:40rpx;background:#edeeff;border-radius:68rpx;padding:48rpx;box-sizing:border-box;position:relative;z-index:1;overflow:hidden}.milk-card__header{display:flex;align-items:center;justify-content:space-between}.milk-card__icon{width:96rpx;height:96rpx;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center}.milk-card__icon image{width:50rpx;height:50rpx}.milk-card__title{flex:1;display:flex;align-items:center;font-weight:900;color:#555273;font-size:44rpx;line-height:1;padding-left:24rpx}.milk-card__tag{width:-webkit-min-content;width:min-content;height:-webkit-min-content;height:min-content;display:flex;justify-content:center;align-items:center;padding:16rpx 26rpx;background-color:rgba(255,255,255,.72);border-radius:200rpx;font-weight:900;color:#555273;font-size:32rpx}.milk-card__content{display:flex;align-items:flex-end;position:absolute;left:40rpx;bottom:40rpx}.milk-card__value{font-weight:900;color:#272737;font-size:92rpx;letter-spacing:-.04em;line-height:84rpx}.milk-card__unit{font-weight:700;color:#77758c;font-size:34rpx;line-height:34rpx;padding-left:12rpx;padding-bottom:8rpx}.milk-card__decoration{width:192rpx;height:192rpx;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:20rpx;background-color:#bde4d7;transform:rotate(7deg);position:absolute;right:50rpx;bottom:0;border-radius:16rpx 16rpx 52rpx 52rpx;z-index:0}.milk-card__decoration-img{width:100rpx;height:154rpx;display:flex;justify-content:center;align-items:center;transform:rotate(-7deg);border-radius:36rpx}.grid-wrapper{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24rpx;width:calc(100% - 80rpx);margin:0 40rpx}.grid-card{width:319rpx;height:300rpx;border-radius:60rpx;padding:30rpx;box-sizing:border-box;display:flex;flex-direction:column;position:relative}.height-auto{height:auto!important;border-radius:56rpx!important}.grid-card--purple{background-color:#e5e3ff}.grid-card--pink{background-color:#f5ddd7}.grid-card--green{background-color:#eaf6ee}.grid-card--yellow{background-color:#fff2cf}.grid-card__header{display:flex;align-items:center}.grid-card__icon{width:84rpx;height:84rpx;display:flex;justify-content:center;align-items:center;background-color:rgba(255,255,255,.68);border-radius:200rpx;margin-right:20rpx;flex-shrink:0}.grid-card__icon-img{width:48rpx;height:48rpx;border-radius:50%}.grid-card__title{font-weight:900;font-size:42rpx;line-height:1}.grid-card__title--purple{color:#555273}.grid-card__title--pink{color:#74514c}.grid-card__body{display:flex;align-items:flex-end;margin:24rpx 0}.grid-card__value{font-weight:900;color:#272737;font-size:60rpx;line-height:1}.grid-card__subtitle{font-weight:900;font-size:34rpx;line-height:1.1;color:#355849}.grid-card__subtitle--yellow{color:#6a5220}.grid-card__tip{font-weight:700;font-size:24rpx;line-height:1.2;color:#6f8d7f;letter-spacing:-.03rpx}.grid-card__tip--yellow{color:#9b7e41}.grid-card__pill{background-color:rgba(255,255,255,.8);padding:8rpx 20rpx;border-radius:100rpx;align-self:flex-start;margin-top:auto}.grid-card__pill-text{font-weight:700;color:#77758c;font-size:26rpx;line-height:1;letter-spacing:-.1rpx}.grid-card__poop-body{flex:1;display:flex;align-items:center;justify-content:center}.grid-card__poop-box{width:100%;height:120rpx;background-color:#fff;border-radius:60rpx;display:flex;align-items:center;justify-content:center;box-shadow:0 4rpx 12rpx rgba(0,0,0,.05)}.grid-card__poop-img{width:100%;height:100%}.recent-activities{margin:20rpx 40rpx}.recent-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24rpx}.recent-header .section-title{font-size:36rpx;font-weight:900}.btn-all-wrapper{background-color:#fff;padding:8rpx 28rpx;border-radius:100rpx;box-shadow:0 2rpx 8rpx rgba(0,0,0,.016);border:1px solid rgba(142,138,159,.08);display:flex;align-items:center}.btn-text{font-size:22rpx;font-weight:800;color:var(--baby-purple, #8B80F9)}.activity-list{display:flex;flex-direction:column}.activity-item{background-color:#fff;border-radius:40rpx;padding:30rpx;display:flex;justify-content:space-between;align-items:center;margin-bottom:20rpx;border:1px solid rgba(243,241,255,.5);box-sizing:border-box}.activity-item:last-child{margin-bottom:0}.shadow-mini{box-shadow:0 4rpx 16rpx rgba(0,0,0,.01)}.activity-left{display:flex;align-items:center}.activity-icon-img{width:80rpx;height:80rpx;margin-right:24rpx}.activity-meta{display:flex;flex-direction:column}.activity-name{font-size:28rpx;font-weight:800}.activity-desc{font-size:22rpx;color:#8e8a9f;font-weight:600;margin-top:4rpx}.activity-time{font-size:24rpx;font-weight:700;color:#8e8a9f}.footer-tip{display:flex;justify-content:center;align-items:center;padding:40rpx 0}.footer-tip-text{font-size:24rpx;color:#8e8a9f;font-weight:600}
+/* ===== 椤甸潰鍩虹 ===== */
+.page {
+	height: calc(100vh - 160rpx);
+}
+
+/* ===== 濂堕噺鍗＄墖 ===== */
+.milk-card {
+	height: 360rpx;
+	margin: 40rpx;
+	background: #edeeff;
+	border-radius: 68rpx;
+	padding: 48rpx;
+	box-sizing: border-box;
+	position: relative;
+	z-index: 1;
+	overflow: hidden;
+}
+
+.milk-card__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.milk-card__icon {
+	width: 96rpx;
+	height: 96rpx;
+	background: #ffffff;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.milk-card__icon image {
+	width: 50rpx;
+	height: 50rpx;
+}
+
+.milk-card__title {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	font-weight: 900;
+	color: #555273;
+	font-size: 44rpx;
+	line-height: 1;
+	padding-left: 24rpx;
+}
+
+.milk-card__tag {
+	width: min-content;
+	height: min-content;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 16rpx 26rpx;
+	background-color: rgba(255, 255, 255, 0.72);
+	border-radius: 200rpx;
+	font-weight: 900;
+	color: #555273;
+	font-size: 32rpx;
+}
+
+.milk-card__content {
+	display: flex;
+	align-items: flex-end;
+	position: absolute;
+	left: 40rpx;
+	bottom: 40rpx;
+}
+
+.milk-card__value {
+	font-weight: 900;
+	color: #272737;
+	font-size: 92rpx;
+	letter-spacing: -0.04em;
+	line-height: 84rpx;
+}
+
+.milk-card__unit {
+	font-weight: 700;
+	color: #77758c;
+	font-size: 34rpx;
+	line-height: 34rpx;
+	padding-left: 12rpx;
+	padding-bottom: 8rpx;
+}
+
+/* 濂剁摱瑁呴グ鍥?*/
+.milk-card__decoration {
+	width: 192rpx;
+	height: 192rpx;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: center;
+	padding: 20rpx;
+	background-color: #bde4d7;
+	transform: rotate(7deg);
+	position: absolute;
+	right: 50rpx;
+	bottom: 0;
+	border-radius: 16rpx 16rpx 52rpx 52rpx;
+	z-index: 0;
+}
+
+.milk-card__decoration-img {
+	width: 100rpx;
+	height: 154rpx;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transform: rotate(-7deg);
+	border-radius: 36rpx;
+}
+
+/* ===== 缃戞牸鍗＄墖瀹瑰櫒 ===== */
+.grid-wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 24rpx;
+	width: calc(100% - 80rpx);
+	margin: 0 40rpx;
+}
+
+/* 缃戞牸鍗＄墖鍩虹 */
+.grid-card {
+	width: 319rpx;
+	height: 300rpx;
+	border-radius: 60rpx;
+	padding: 30rpx;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+}
+
+.height-auto {
+	height: auto!important;
+	border-radius: 56rpx!important;
+}
+
+/* 缃戞牸鍗＄墖 - 棰滆壊鍙樹綋 */
+.grid-card--purple { background-color: #e5e3ff; }
+.grid-card--pink   { background-color: #f5ddd7; }
+.grid-card--green  { background-color: #eaf6ee; }
+.grid-card--yellow { background-color: #fff2cf; }
+
+/* 鍗＄墖澶撮儴锛氬浘鏍?+ 鏍囬 */
+.grid-card__header {
+	display: flex;
+	align-items: center;
+}
+
+.grid-card__icon {
+	width: 84rpx;
+	height: 84rpx;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: rgba(255, 255, 255, 0.68);
+	border-radius: 200rpx;
+	margin-right: 20rpx;
+	flex-shrink: 0;
+}
+
+.grid-card__icon-img {
+	width: 48rpx;
+	height: 48rpx;
+	border-radius: 50%;
+}
+
+.grid-card__title {
+	font-weight: 900;
+	font-size: 42rpx;
+	line-height: 1;
+}
+
+.grid-card__title--purple { color: #555273; }
+.grid-card__title--pink   { color: #74514c; }
+
+/* 鍗＄墖涓讳綋鍐呭 */
+.grid-card__body {
+	display: flex;
+	align-items: flex-end;
+	margin: 24rpx 0;
+}
+
+.grid-card__value {
+	font-weight: 900;
+	color: #272737;
+	font-size: 60rpx;
+	line-height: 1;
+}
+
+/* 楂樺害/鐤嫍鍗＄墖鏍囬鍙婃彁绀?*/
+.grid-card__subtitle {
+	font-weight: 900;
+	font-size: 34rpx;
+	line-height: 1.1;
+	color: #355849;
+}
+
+.grid-card__subtitle--yellow {
+	color: #6a5220;
+}
+
+.grid-card__tip {
+	font-weight: 700;
+	font-size: 24rpx;
+	line-height: 1.2;
+	color: #6f8d7f;
+	letter-spacing: -0.03rpx;
+}
+
+.grid-card__tip--yellow {
+	color: #9b7e41;
+}
+
+/* 鐫＄湢鍗＄墖 - 搴曢儴鑳跺泭 */
+.grid-card__pill {
+	background-color: rgba(255, 255, 255, 0.8);
+	padding: 8rpx 20rpx;
+	border-radius: 100rpx;
+	align-self: flex-start;
+	margin-top: auto;
+}
+
+.grid-card__pill-text {
+	font-weight: 700;
+	color: #77758c;
+	font-size: 26rpx;
+	line-height: 1;
+	letter-spacing: -0.1rpx;
+}
+
+/* 渚夸究鍗＄墖 - 鐧借壊璁板綍妗?*/
+.grid-card__poop-body {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.grid-card__poop-box {
+	width: 100%;
+	height: 120rpx;
+	background-color: #ffffff;
+	border-radius: 60rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.grid-card__poop-img {
+	width: 100%;
+	height: 100%;
+}
+
+/* ===== 鏈€杩戞椿鍔ㄥ垪琛?===== */
+.recent-activities {
+	margin: 20rpx 40rpx;
+}
+
+.recent-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 24rpx;
+}
+
+.recent-header .section-title {
+	font-size: 36rpx;
+	font-weight: 900;
+}
+
+.btn-all-wrapper {
+	background-color: #FFFFFF;
+	padding: 8rpx 28rpx;
+	border-radius: 100rpx;
+	box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.015);
+	border: 1px solid rgba(142, 138, 159, 0.08);
+	display: flex;
+	align-items: center;
+}
+
+.btn-text {
+	font-size: 22rpx;
+	font-weight: 800;
+	color: var(--baby-purple, #8B80F9);
+}
+
+.activity-list {
+	display: flex;
+	flex-direction: column;
+}
+
+.activity-item {
+	background-color: #FFFFFF;
+	border-radius: 40rpx;
+	padding: 30rpx;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20rpx;
+	border: 1px solid rgba(243, 241, 255, 0.5);
+	box-sizing: border-box;
+}
+
+.activity-item:last-child {
+	margin-bottom: 0;
+}
+
+.shadow-mini {
+	box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.01);
+}
+
+.activity-left {
+	display: flex;
+	align-items: center;
+}
+
+.activity-icon-img {
+	width: 80rpx;
+	height: 80rpx;
+	margin-right: 24rpx;
+}
+
+.activity-meta {
+	display: flex;
+	flex-direction: column;
+}
+
+.activity-name {
+	font-size: 28rpx;
+	font-weight: 800;
+}
+
+.activity-desc {
+	font-size: 22rpx;
+	color: #8E8A9F;
+	font-weight: 600;
+	margin-top: 4rpx;
+}
+
+.activity-time {
+	font-size: 24rpx;
+	font-weight: 700;
+	color: #8E8A9F;
+}
+
+/* ===== 搴曢儴鎻愮ず ===== */
+.footer-tip {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 40rpx 0;
+}
+
+.footer-tip-text {
+	font-size: 24rpx;
+	color: #8E8A9F;
+	font-weight: 600;
+}
+
