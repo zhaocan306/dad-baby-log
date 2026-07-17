@@ -1,1 +1,85 @@
-﻿<scroll-view class="page" scroll-y><custom-navbar  /><user-header wx:if="{{a}}"   /><view class="milk-card"><view class="milk-card__header"><view class="milk-card__icon"><image src="{{b}}"/></view><text class="milk-card__title">鎬诲ザ閲?/text><view class="milk-card__tag">+8%</view></view><view class="milk-card__content"><text class="milk-card__value">520</text><text class="milk-card__unit">姣崌</text></view><view class="milk-card__decoration"><image class="milk-card__decoration-img" src="{{c}}"/></view></view><view class="grid-wrapper"><view class="grid-card grid-card--purple"><view class="grid-card__header"><view class="grid-card__icon"><image class="grid-card__icon-img" src="{{d}}" mode="aspectFit"/></view><text class="grid-card__title grid-card__title--purple">鐫＄湢</text></view><view class="grid-card__body"><text class="grid-card__value">6.5 灏忔椂</text></view><view class="grid-card__pill"><text class="grid-card__pill-text">涓嬫灏忕潯 14:30</text></view></view><view class="grid-card grid-card--pink"><view class="grid-card__header"><view class="grid-card__icon"><image class="grid-card__icon-img" src="{{e}}" mode="aspectFit"/></view><text class="grid-card__title grid-card__title--pink">渚夸究</text></view><view class="grid-card__poop-body"><view class="grid-card__poop-box"><image class="grid-card__poop-img" src="{{f}}" mode="aspectFit"/></view></view></view><view class="grid-card grid-card--green height-auto"><view class="grid-card__header"><image class="grid-card__icon-img" src="{{g}}" mode="aspectFit"/></view><view class="grid-card__body"><text class="grid-card__subtitle">韬珮 52.4cm</text></view><text class="grid-card__tip">浣撻噸 4.1kg 路 鏈懆 +180g</text></view><view class="grid-card grid-card--yellow height-auto"><view class="grid-card__header"><image class="grid-card__icon-img" src="{{h}}" mode="aspectFit"/></view><view class="grid-card__body"><text class="grid-card__subtitle grid-card__subtitle--yellow">涔欒倽绗?2 閽?/text></view><text class="grid-card__tip grid-card__tip--yellow">杩樺墿 2 澶?路 甯︽帴绉嶆湰</text></view></view><view class="recent-activities"><view class="recent-header"><text class="section-title">鏈€杩戞椿鍔?/text><view class="btn-all-wrapper"><text class="btn-text">鏌ョ湅鍏ㄩ儴</text></view></view><view class="activity-list"><view class="activity-item shadow-mini"><view class="activity-left"><image class="activity-icon-img" src="{{i}}" mode="aspectFit"></image><view class="activity-meta"><text class="activity-name">濂剁摱鍠傚吇</text><text class="activity-desc">120ml 路 宸︿晶鎷嶅棟 6 鍒嗛挓</text></view></view><text class="activity-time">09:20</text></view><view class="activity-item shadow-mini"><view class="activity-left"><image class="activity-icon-img" src="{{j}}" mode="aspectFit"></image><view class="activity-meta"><text class="activity-name">榛勯噾渚夸究</text><text class="activity-desc">閲忎腑 路 杞硦鐘?路 宸叉崲灏垮竷</text></view></view><text class="activity-time">08:45</text></view></view></view><view class="footer-tip"><text class="footer-tip-text">~ 鍒板簳鍟?~</text></view></scroll-view>
+<scroll-view class="page" scroll-y>
+  <custom-navbar />
+  <user-header name="{{babyName}}" tip="{{babyTip}}" />
+  
+  <navigator url="/pages/milk-history/milk-history" hover-class="none">
+    <view class="milk-card">
+      <view class="milk-card__header">
+        <view class="milk-card__icon"><image src="/static/shuidi.png" /></view>
+        <text class="milk-card__title">总奶量</text>
+        <view class="milk-card__tag">{{milkTag}}</view>
+      </view>
+      <view class="milk-card__content">
+        <text class="milk-card__value">{{todayMilk}}</text>
+        <text class="milk-card__unit">毫升</text>
+      </view>
+      <view class="milk-card__decoration">
+        <image class="milk-card__decoration-img" src="/static/naiping.png" />
+      </view>
+    </view>
+  </navigator>
+
+  <view class="grid-wrapper">
+    <navigator url="/pages/sleep-history/sleep-history" hover-class="none">
+      <view class="grid-card grid-card--purple">
+        <view class="grid-card__header">
+          <view class="grid-card__icon"><image class="grid-card__icon-img" src="/static/shuimian.png" mode="aspectFit" /></view>
+          <text class="grid-card__title grid-card__title--purple">睡眠</text>
+        </view>
+        <view class="grid-card__body"><text class="grid-card__value">{{sleepHours}} 小时</text></view>
+        <view class="grid-card__pill"><text class="grid-card__pill-text">下次小睡 {{sleepNext}}</text></view>
+      </view>
+    </navigator>
+
+    <navigator url="/pages/poop-history/poop-history" hover-class="none">
+      <view class="grid-card grid-card--pink">
+        <view class="grid-card__header">
+          <view class="grid-card__icon"><image class="grid-card__icon-img" src="/static/bianbian.png" mode="aspectFit" /></view>
+          <text class="grid-card__title grid-card__title--pink">便便</text>
+        </view>
+        <view class="grid-card__poop-body">
+          <view class="grid-card__poop-box"><image class="grid-card__poop-img" src="/static/niaobu.png" mode="aspectFit" /></view>
+        </view>
+      </view>
+    </navigator>
+
+    <navigator url="/pages/height-history/height-history" hover-class="none">
+      <view class="grid-card grid-card--green height-auto">
+        <view class="grid-card__header"><image class="grid-card__icon-img" src="/static/shengao.png" mode="aspectFit" /></view>
+        <view class="grid-card__body"><text class="grid-card__subtitle">{{heightText}}</text></view>
+        <text class="grid-card__tip">{{weightText}} · 本周 +180g</text>
+      </view>
+    </navigator>
+
+    <navigator url="/pages/vaccine-history/vaccine-history" hover-class="none">
+      <view class="grid-card grid-card--yellow height-auto">
+        <view class="grid-card__header"><image class="grid-card__icon-img" src="/static/yimiao.png" mode="aspectFit" /></view>
+        <view class="grid-card__body"><text class="grid-card__subtitle grid-card__subtitle--yellow">{{vaccineName}}</text></view>
+        <text class="grid-card__tip grid-card__tip--yellow">{{vaccineDays}} · 带接种本</text>
+      </view>
+    </navigator>
+  </view>
+
+  <view class="recent-activities">
+    <view class="recent-header">
+      <text class="section-title">最近活动</text>
+      <view class="btn-all-wrapper"><text class="btn-text">查看全部</text></view>
+    </view>
+    <view class="activity-list">
+      <view class="activity-item shadow-mini" wx:for="{{recentActivities}}" wx:key="index">
+        <view class="activity-left">
+          <image class="activity-icon-img" src="{{item.icon}}" mode="aspectFit" />
+          <view class="activity-meta">
+            <text class="activity-name">{{item.name}}</text>
+            <text class="activity-desc">{{item.desc}}</text>
+          </view>
+        </view>
+        <text class="activity-time">{{item.time}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="footer-tip">
+    <text class="footer-tip-text">~ 到底啦 ~</text>
+  </view>
+</scroll-view>
