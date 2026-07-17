@@ -17,7 +17,7 @@
       <view class="card-header">
         <text class="card-title">下一针</text>
         <view class="countdown-badge">
-          <text class="countdown-text">{{nextVaccine ? "还剩 " + nextVaccine.days + " 天" : "--"}}</text>
+          <text class="countdown-text">{{vaccineCountdown}}</text>
         </view>
       </view>
       <view class="card-body">
@@ -25,8 +25,8 @@
           <image class="vaccine-needle-icon" src="/static/icon-needle-orange.png" mode="aspectFit" />
         </view>
         <view class="vaccine-info-meta">
-          <text class="vaccine-name">{{nextVaccine?.name || "暂无"}}</text>
-          <text class="vaccine-details">{{nextVaccine?.appointment || ""}}</text>
+          <text class="vaccine-name">{{vaccineName}}</text>
+          <text class="vaccine-details">{{vaccineDetails}}</text>
         </view>
       </view>
     </view>
