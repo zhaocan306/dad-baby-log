@@ -1,1 +1,1 @@
-﻿{ "component": true, "usingComponents": { "custom-navbar": "/components/custom-navbar/custom-navbar", "user-header": "/components/user-header/user-header" } }
+{ "component": true, "usingComponents": { "custom-navbar": "/components/custom-navbar/custom-navbar", "user-header": "/components/user-header/user-header" } }
