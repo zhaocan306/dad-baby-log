@@ -1,4 +1,4 @@
-﻿const { query } = require('../../utils/cloud')
+const { query } = require('../../utils/cloud')
 Page({
   data: { familyName: 'cc cc', babyDetail: '小鲸鱼 · 29 天 · 女宝宝', memberCount: '3', daysOld: '29', totalRecords: '186' },
   onLoad() { this.loadData() },

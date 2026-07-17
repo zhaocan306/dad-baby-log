@@ -3,33 +3,33 @@
   <scroll-view class="inner-padding" scroll-y>
     <view class="header-section">
       <view class="title-text-group">
-        <text class="title-main">喝奶历史</text>
-        <text class="title-sub">按天查看奶量、方式和间隔</text>
+        <text class="title-main">鍠濆ザ鍘嗗彶</text>
+        <text class="title-sub">鎸夊ぉ鏌ョ湅濂堕噺銆佹柟寮忓拰闂撮殧</text>
       </view>
       <view class="time-badge">
-        <text class="badge-text">7天</text>
+        <text class="badge-text">7澶?/text>
       </view>
     </view>
     <view class="card-milk-summary shadow-soft">
       <view class="card-header">
         <view class="title-with-icon">
           <image class="summary-card-icon" src="/static/icon-milk.png" mode="aspectFit" />
-          <text class="card-title">本周总奶量</text>
+          <text class="card-title">鏈懆鎬诲ザ閲?/text>
         </view>
         <view class="status-badge">
           <text class="status-badge-text">+6%</text>
         </view>
       </view>
       <view class="stats-row">
-        <view class="stat-item"><text class="stat-number">{{stats.total}}L</text><text class="stat-label">总量</text></view>
-        <view class="stat-item"><text class="stat-number">{{stats.dailyAvg}}ml</text><text class="stat-label">日均</text></view>
-        <view class="stat-item"><text class="stat-number">{{stats.count}}次</text><text class="stat-label">喂养</text></view>
+        <view class="stat-item"><text class="stat-number">{{stats.total}}L</text><text class="stat-label">鎬婚噺</text></view>
+        <view class="stat-item"><text class="stat-number">{{stats.dailyAvg}}ml</text><text class="stat-label">鏃ュ潎</text></view>
+        <view class="stat-item"><text class="stat-number">{{stats.count}}娆?/text><text class="stat-label">鍠傚吇</text></view>
       </view>
     </view>
     <view class="recent-records-section">
       <view class="records-header">
-        <text class="section-title">最近记录</text>
-        <text class="sort-text">按日期</text>
+        <text class="section-title">鏈€杩戣褰?/text>
+        <text class="sort-text">鎸夋棩鏈?/text>
       </view>
       <view class="records-list-container shadow-mini">
         <view class="record-item" wx:for="{{records}}" wx:key="id" wx:for-item="r">
@@ -40,9 +40,10 @@
               <text class="record-desc">{{r.note}}</text>
             </view>
           </view>
-          <text class="record-time">{{r.created_at?.slice(11, 16) || ""}}</text>
+          <text class="record-time">{{r._time}}</text>
         </view>
       </view>
     </view>
   </scroll-view>
 </view>
+

@@ -1,4 +1,4 @@
-﻿const { query, _ } = require('../../utils/cloud')
+const { query, _ } = require('../../utils/cloud')
 Page({
   data: { milestones: [] },
   onLoad() { this.loadData() },

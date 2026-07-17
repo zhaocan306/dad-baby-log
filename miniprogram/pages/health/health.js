@@ -1,4 +1,4 @@
-﻿const { query, callFunction, _ } = require('../../utils/cloud')
+const { query, callFunction, _ } = require('../../utils/cloud')
 Page({
   data: { nextVaccine: null, milestones: [] },
   onLoad() { this.loadData() },

@@ -3,33 +3,33 @@
   <scroll-view class="inner-padding" scroll-y>
     <view class="header-section">
       <view class="title-text-group">
-        <text class="title-main">疫苗历史</text>
-        <text class="title-sub">查看已接种、待预约和留观记录</text>
+        <text class="title-main">鐤嫍鍘嗗彶</text>
+        <text class="title-sub">鏌ョ湅宸叉帴绉嶃€佸緟棰勭害鍜岀暀瑙傝褰?/text>
       </view>
       <view class="time-badge">
-        <text class="badge-text">7天</text>
+        <text class="badge-text">7澶?/text>
       </view>
     </view>
     <view class="card-vaccine-summary shadow-soft">
       <view class="card-header">
         <view class="title-with-icon">
           <image class="summary-card-icon" src="/static/icon-vaccine-summary.png" mode="aspectFit" />
-          <text class="card-title">疫苗进度</text>
+          <text class="card-title">鐤嫍杩涘害</text>
         </view>
         <view class="status-badge">
-          <text class="status-badge-text">还剩2天</text>
+          <text class="status-badge-text">杩樺墿2澶?/text>
         </view>
       </view>
       <view class="stats-row">
-<view class="stat-item"><text class="stat-number">{{stats.done}}针</text><text class="stat-label">已完成</text></view>
-        <view class="stat-item"><text class="stat-number">{{stats.booked}}针</text><text class="stat-label">预约中</text></view>
-        <view class="stat-item"><text class="stat-number">0次</text><text class="stat-label">不适</text></view>
+<view class="stat-item"><text class="stat-number">{{stats.done}}閽?/text><text class="stat-label">宸插畬鎴?/text></view>
+        <view class="stat-item"><text class="stat-number">{{stats.booked}}閽?/text><text class="stat-label">棰勭害涓?/text></view>
+        <view class="stat-item"><text class="stat-number">0娆?/text><text class="stat-label">涓嶉€?/text></view>
       </view>
     </view>
     <view class="recent-records-section">
       <view class="records-header">
-        <text class="section-title">最近记录</text>
-        <text class="sort-text">按日期</text>
+        <text class="section-title">鏈€杩戣褰?/text>
+        <text class="sort-text">鎸夋棩鏈?/text>
       </view>
       <view class="records-list-container shadow-mini">
         <view class="record-item" wx:for="{{records}}" wx:key="id" wx:for-item="r">
@@ -40,10 +40,12 @@
               <text class="record-desc">{{r.note}}</text>
             </view>
           </view>
-          <text class="record-time">{{r.created_at?.slice(5,10) || ""}}</text>
+          <text class="record-time">{{r._date}}</text>
         </view>
       </view>
     </view>
   </scroll-view>
 </view>
+
+
 

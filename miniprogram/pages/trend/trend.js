@@ -1,4 +1,4 @@
-﻿const { query, callFunction, _ } = require('../../utils/cloud')
+const { query, callFunction, _ } = require('../../utils/cloud')
 const DAY_NAMES = ['日','一','二','三','四','五','六']
 Page({
   data: { milkTotal: '3.42L', milkTag: '+6%', sleepAvg: '15.8', nightWakes: '2', poopCount: '9 次', weightGain: '+180g', dailyAvgMl: '488', barData: [] },

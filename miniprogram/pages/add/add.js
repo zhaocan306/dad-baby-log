@@ -1,4 +1,4 @@
-﻿const { add } = require('../../utils/cloud')
+const { add } = require('../../utils/cloud')
 
 Page({
   data: {
