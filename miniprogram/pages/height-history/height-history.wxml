@@ -1,35 +1,35 @@
-﻿<view class="page">
+<view class="page">
   <custom-navbar showBack="{{true}}" bindback="goBack" />
   <scroll-view class="inner-padding" scroll-y>
     <view class="header-section">
       <view class="title-text-group">
-        <text class="title-main">韬珮鍘嗗彶</text>
-        <text class="title-sub">鏌ョ湅韬珮銆佷綋閲嶃€佸ご鍥村闀胯建杩?/text>
+        <text class="title-main">身高历史</text>
+        <text class="title-sub">查看身高、体重、头围增长轨迹</text>
       </view>
       <view class="time-badge">
-        <text class="badge-text">7澶?/text>
+        <text class="badge-text">7天</text>
       </view>
     </view>
     <view class="card-height-summary shadow-soft">
       <view class="card-header">
         <view class="title-with-icon">
           <image class="summary-card-icon" src="/static/icon-height-chart.png" mode="aspectFit" />
-          <text class="card-title">鎴愰暱璁板綍</text>
+          <text class="card-title text-green">成长记录</text>
         </view>
         <view class="status-badge">
-          <text class="status-badge-text">绋冲畾</text>
+          <text class="status-badge-text">稳定</text>
         </view>
       </view>
       <view class="stats-row">
-<view class="stat-item"><text class="stat-number text-green">{{stats.height_cm || 52.4}}</text><text class="stat-label text-green-light">韬珮cm</text></view>
-        <view class="stat-item"><text class="stat-number text-green">{{stats.weight_kg || 4.1}}kg</text><text class="stat-label text-green-light">浣撻噸</text></view>
-        <view class="stat-item"><text class="stat-number text-green">{{stats.head_cm || 37}}cm</text><text class="stat-label text-green-light">澶村洿</text></view>
+        <view class="stat-item"><text class="stat-number text-green">{{stats.height_cm || 52.4}}</text><text class="stat-label text-green-light">身高cm</text></view>
+        <view class="stat-item"><text class="stat-number text-green">{{stats.weight_kg || 4.1}}kg</text><text class="stat-label text-green-light">体重</text></view>
+        <view class="stat-item"><text class="stat-number text-green">{{stats.head_cm || 37}}cm</text><text class="stat-label text-green-light">头围</text></view>
       </view>
     </view>
     <view class="recent-records-section">
       <view class="records-header">
-        <text class="section-title">鏈€杩戣褰?/text>
-        <text class="sort-text">鎸夋棩鏈?/text>
+        <text class="section-title">最近记录</text>
+        <text class="sort-text">按日期</text>
       </view>
       <view class="records-list-container shadow-mini">
         <view class="record-item" wx:for="{{records}}" wx:key="id" wx:for-item="r">
@@ -46,6 +46,3 @@
     </view>
   </scroll-view>
 </view>
-
-
-
