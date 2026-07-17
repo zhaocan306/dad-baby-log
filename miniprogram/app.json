@@ -23,11 +23,11 @@
     "backgroundColor": "#FFFFFF",
     "borderStyle": "white",
     "list": [
-      { "pagePath": "pages/index/index", "text": "首页", "iconPath": "static/tabbar/home.png", "selectedIconPath": "static/tabbar/home_active.png" },
-      { "pagePath": "pages/trend/trend", "text": "趋势", "iconPath": "static/tabbar/trend.png", "selectedIconPath": "static/tabbar/trend_active.png" },
-      { "pagePath": "pages/add/add", "text": "添加", "iconPath": "static/tabbar/add.png", "selectedIconPath": "static/tabbar/add_active.png" },
-      { "pagePath": "pages/health/health", "text": "健康", "iconPath": "static/tabbar/health.png", "selectedIconPath": "static/tabbar/health_active.png" },
-      { "pagePath": "pages/message/message", "text": "消息", "iconPath": "static/tabbar/message.png", "selectedIconPath": "static/tabbar/message_active.png" }
+      { "pagePath": "pages/index/index", "text": "首页", "iconPath": "/static/tabbar/home.png", "selectedIconPath": "/static/tabbar/home_active.png" },
+      { "pagePath": "pages/trend/trend", "text": "趋势", "iconPath": "/static/tabbar/trend.png", "selectedIconPath": "/static/tabbar/trend_active.png" },
+      { "pagePath": "pages/add/add", "text": "添加", "iconPath": "/static/tabbar/add.png", "selectedIconPath": "/static/tabbar/add_active.png" },
+      { "pagePath": "pages/health/health", "text": "健康", "iconPath": "/static/tabbar/health.png", "selectedIconPath": "/static/tabbar/health_active.png" },
+      { "pagePath": "pages/message/message", "text": "消息", "iconPath": "/static/tabbar/message.png", "selectedIconPath": "/static/tabbar/message_active.png" }
     ]
   },
   "usingComponents": {
