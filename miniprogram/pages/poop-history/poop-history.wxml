@@ -3,33 +3,33 @@
   <scroll-view class="inner-padding" scroll-y>
     <view class="header-section">
       <view class="title-text-group">
-        <text class="title-main">渚夸究鍘嗗彶</text>
-        <text class="title-sub">璁板綍娆℃暟銆侀鑹层€佸舰鎬佸拰灏垮竷鎯呭喌</text>
+        <text class="title-main">便便历史</text>
+        <text class="title-sub">记录次数、颜色、形态和尿布情况</text>
       </view>
       <view class="time-badge">
-        <text class="badge-text">7澶?/text>
+        <text class="badge-text">7天</text>
       </view>
     </view>
     <view class="card-poop-summary shadow-soft">
       <view class="card-header">
         <view class="title-with-icon">
           <image class="summary-card-icon" src="/static/icon-poop-smile.png" mode="aspectFit" />
-          <text class="card-title">鏈懆渚夸究</text>
+          <text class="card-title">本周便便</text>
         </view>
         <view class="status-badge">
-          <text class="status-badge-text">姝ｅ父</text>
+          <text class="status-badge-text">正常</text>
         </view>
       </view>
       <view class="stats-row">
-        <view class="stat-item"><text class="stat-number">{{stats.total}}娆?/text><text class="stat-label">鎬绘鏁?/text></view>
-        <view class="stat-item"><text class="stat-number">{{stats.amount || "涓?}}閲?/text><text class="stat-label">甯歌閲?/text></view>
-        <view class="stat-item"><text class="stat-number">{{stats.total || "0"}娆?/text><text class="stat-label">閲戦粍鑹?/text></view>
+        <view class="stat-item"><text class="stat-number">{{stats.total || "0"}}次</text><text class="stat-label">总次数</text></view>
+        <view class="stat-item"><text class="stat-number">{{stats.amount || "中"}}量</text><text class="stat-label">常见量</text></view>
+        <view class="stat-item"><text class="stat-number">{{stats.golden || "0"}}次</text><text class="stat-label">金黄色</text></view>
       </view>
     </view>
     <view class="recent-records-section">
       <view class="records-header">
-        <text class="section-title">鏈€杩戣褰?/text>
-        <text class="sort-text">鎸夋棩鏈?/text>
+        <text class="section-title">最近记录</text>
+        <text class="sort-text">按日期</text>
       </view>
       <view class="records-list-container shadow-mini">
         <view class="record-item" wx:for="{{records}}" wx:key="id" wx:for-item="r">
