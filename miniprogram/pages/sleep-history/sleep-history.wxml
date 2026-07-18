@@ -1,35 +1,35 @@
-﻿<view class="page">
+<view class="page">
   <custom-navbar showBack="{{true}}" bindback="goBack" />
   <scroll-view class="inner-padding" scroll-y>
     <view class="header-section">
       <view class="title-text-group">
-        <text class="title-main">鐫＄湢鍘嗗彶</text>
-        <text class="title-sub">鏌ョ湅灏忕潯銆佸鐫″拰澶滈啋鎯呭喌</text>
+        <text class="title-main">睡眠历史</text>
+        <text class="title-sub">查看小睡、夜睡和夜醒情况</text>
       </view>
       <view class="time-badge">
-        <text class="badge-text">7澶?/text>
+        <text class="badge-text">7天</text>
       </view>
     </view>
     <view class="card-sleep-summary shadow-soft">
       <view class="card-header">
         <view class="title-with-icon">
           <image class="summary-card-icon" src="/static/icon-sleep-summary.png" mode="aspectFit" />
-          <text class="card-title">鏈懆鐫＄湢</text>
+          <text class="card-title">本周睡眠</text>
         </view>
         <view class="status-badge">
           <text class="status-badge-text">+0.8h</text>
         </view>
       </view>
       <view class="stats-row">
-        <view class="stat-item"><text class="stat-number">{{stats.totalMin}}h</text><text class="stat-label">鎬绘椂闀?/text></view>
-        <view class="stat-item"><text class="stat-number">{{stats.dailyAvg}}h</text><text class="stat-label">鏃ュ潎</text></view>
-        <view class="stat-item"><text class="stat-number">{{stats.totalWakes}}娆?/text><text class="stat-label">澶滈啋</text></view>
+        <view class="stat-item"><text class="stat-number">{{stats.totalMin || "0"}}h</text><text class="stat-label">总时长</text></view>
+        <view class="stat-item"><text class="stat-number">{{stats.dailyAvg || "0"}}h</text><text class="stat-label">日均</text></view>
+        <view class="stat-item"><text class="stat-number">{{stats.totalWakes || "0"}}次</text><text class="stat-label">夜醒</text></view>
       </view>
     </view>
     <view class="recent-records-section">
       <view class="records-header">
-        <text class="section-title">鏈€杩戣褰?/text>
-        <text class="sort-text">鎸夋棩鏈?/text>
+        <text class="section-title">最近记录</text>
+        <text class="sort-text">按日期</text>
       </view>
       <view class="records-list-container shadow-mini">
         <view class="record-item" wx:for="{{records}}" wx:key="id" wx:for-item="r">

@@ -21,9 +21,9 @@
         </view>
       </view>
       <view class="stats-row">
-        <view class="stat-item"><text class="stat-number">{{stats.total}}L</text><text class="stat-label">总量</text></view>
-        <view class="stat-item"><text class="stat-number">{{stats.dailyAvg}}ml</text><text class="stat-label">日均</text></view>
-        <view class="stat-item"><text class="stat-number">{{stats.count}}次</text><text class="stat-label">喂养</text></view>
+        <view class="stat-item"><text class="stat-number">{{stats.total || "0"}}L</text><text class="stat-label">总量</text></view>
+        <view class="stat-item"><text class="stat-number">{{stats.dailyAvg || "0"}}ml</text><text class="stat-label">日均</text></view>
+        <view class="stat-item"><text class="stat-number">{{stats.count || "0"}}次</text><text class="stat-label">喂养</text></view>
       </view>
     </view>
     <view class="recent-records-section">

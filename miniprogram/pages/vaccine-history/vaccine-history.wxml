@@ -21,8 +21,8 @@
         </view>
       </view>
       <view class="stats-row">
-        <view class="stat-item"><text class="stat-number">{{stats.done}}针</text><text class="stat-label">已完成</text></view>
-        <view class="stat-item"><text class="stat-number">{{stats.booked}}针</text><text class="stat-label">预约中</text></view>
+        <view class="stat-item"><text class="stat-number">{{stats.done || "0"}}针</text><text class="stat-label">已完成</text></view>
+        <view class="stat-item"><text class="stat-number">{{stats.booked || "0"}}针</text><text class="stat-label">预约中</text></view>
         <view class="stat-item"><text class="stat-number">0次</text><text class="stat-label">不适</text></view>
       </view>
     </view>
