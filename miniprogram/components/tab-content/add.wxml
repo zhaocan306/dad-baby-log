@@ -41,7 +41,7 @@
         <textarea class="memo-textarea" placeholder="{{currentConfig.placeholder}}" placeholder-class="textarea-placeholder" fixed="true" bindinput="onNoteInput" value="{{note}}" />
       </view>
     </view>
-    <view class="save-button shadow-purple" bindtap="save">
+    <view class="save-button shadow-purple" bindtap="onSave">
       <image class="save-btn-icon" src="/static/icon-save-plus.png" mode="aspectFit" />
       <text class="save-btn-text">{{saving ? "保存中..." : currentConfig.btnText}}</text>
     </view>
