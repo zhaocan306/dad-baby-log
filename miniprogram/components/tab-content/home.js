@@ -11,7 +11,17 @@ Component({
     vaccineName: '乙肝第 2 针', vaccineDays: '还剩 2 天',
     recentActivities: []
   },
-  lifetimes: { attached() { this.loadData() } },
+  lifetimes: {
+    attached() {
+      this.loadData()
+      // 如果初始化还没完成，延迟重试
+      setTimeout(() => {
+        if (!wx.getStorageSync('current_baby_id')) {
+          this.loadData()
+        }
+      }, 2000)
+    }
+  },
   methods: {
     async loadData() {
       try {
@@ -27,9 +37,10 @@ Component({
             babyName: b.name + ' 的一天',
             babyTip: '来到这个世界 ' + days + ' 天啦'
           })
+          console.log('Baby loaded:', b.name, days + '天')
         }
 
-        // 并行加载各统计数据
+        // 并行加载统计数据
         const [feedStats, sleepStats, poopStats, heightLatest] = await Promise.all([
           callFunction('getWeeklyStats', { babyId, type: 'feed' }),
           callFunction('getWeeklyStats', { babyId, type: 'sleep' }),
@@ -44,16 +55,8 @@ Component({
           heightText: heightLatest ? ('身高 ' + heightLatest.height_cm + 'cm') : '身高 52.4cm',
           weightText: heightLatest ? ('体重 ' + heightLatest.weight_kg + 'kg') : '体重 4.1kg'
         })
-
-        // 最近活动
-        const feeds = await query('feed_records', { filter: { baby_id: babyId }, orderBy: { field: 'created_at', direction: 'desc' }, limit: 5 })
-        this.setData({ recentActivities: feeds.slice(0, 5).map(r => ({
-          icon: '/static/list-icon-milk-1.png',
-          name: '奶瓶喂养',
-          desc: (r.amount_ml || '') + 'ml',
-          time: r.created_at ? r.created_at.slice(11, 16) : ''
-        })) })
-      } catch(e) { console.log(e) }
+        console.log('Home data loaded:', feedStats)
+      } catch(e) { console.log('Home loadData error:', e) }
     },
     async getLatestHeight(babyId) {
       const records = await query('height_records', { filter: { baby_id: babyId }, orderBy: { field: 'date', direction: 'desc' }, limit: 1 })
