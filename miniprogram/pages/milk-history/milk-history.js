@@ -1,6 +1,6 @@
-const { query, _ } = require('../../utils/cloud')
+﻿const { query, callFunction, _ } = require('../../utils/cloud')
 Page({
-  data: { stats: {}, records: [] },
+  data: { stats: null, records: [] },
   onLoad() { this.loadData() },
   async loadData() {
     try {
