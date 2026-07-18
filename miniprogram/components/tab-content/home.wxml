@@ -5,7 +5,7 @@
   <navigator url="/pages/milk-history/milk-history" hover-class="none">
     <view class="milk-card">
       <view class="milk-card__header">
-        <view class="milk-card__icon"><image src="/static/shuidi.png" /></view>
+        <view class="milk-card__icon"><image class="milk-card__icon-img" src="/static/shuidi.png" /></view>
         <text class="milk-card__title">总奶量</text>
         <view class="milk-card__tag">{{milkTag}}</view>
       </view>

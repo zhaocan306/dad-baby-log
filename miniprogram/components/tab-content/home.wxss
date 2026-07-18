@@ -32,7 +32,7 @@
 	justify-content: center;
 }
 
-.milk-card__icon image {
+.milk-card__icon-img {
 	width: 50rpx;
 	height: 50rpx;
 }
