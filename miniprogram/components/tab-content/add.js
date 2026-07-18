@@ -1,4 +1,5 @@
 const { add } = require('../../utils/cloud')
+
 Component({
   properties: { current: { type: String, value: '' } },
   data: {
@@ -38,8 +39,52 @@ Component({
     },
     selectTag(e) { this.setData({ selectedTag: e.currentTarget.dataset.tag }) },
     onNoteInput(e) { this.setData({ note: e.detail.value }) },
-    onSave() {
-      wx.showToast({ title: '保存成功', icon: 'success' })
+    async onSave() {
+      if (this.data.saving) return
+      this.setData({ saving: true })
+      try {
+        const babyId = wx.getStorageSync('current_baby_id')
+        if (!babyId) { wx.showToast({ title: '请先设置宝宝', icon: 'none' }); return }
+
+        const type = this.data.currentType
+        const payload = { baby_id: babyId, note: this.data.note, created_at: new Date() }
+
+        switch (type) {
+          case 'milk':
+            payload.type = this.data.selectedTag === '亲喂' ? 'breast' : this.data.selectedTag === '配方奶' ? 'formula' : 'bottle'
+            payload.amount_ml = +this.data.recordValue
+            break
+          case 'poop':
+            payload.amount = this.data.recordValue === '少' ? 'little' : this.data.recordValue === '中' ? 'middle' : 'large'
+            payload.color = this.data.selectedTag || null
+            payload.diaper_changed = true
+            break
+          case 'sleep':
+            payload.type = this.data.selectedTag === '夜间睡眠' ? 'night' : this.data.selectedTag === '安抚入睡' ? 'nap' : 'nap'
+            payload.start_time = new Date().toISOString()
+            payload.end_time = new Date(Date.now() + (+this.data.recordValue * 3600000)).toISOString()
+            payload.duration_min = +this.data.recordValue * 60
+            break
+          case 'height':
+            payload.height_cm = +this.data.recordValue
+            payload.date = new Date().toISOString().slice(0, 10)
+            break
+          case 'vaccine':
+            payload.name = this.data.recordValue
+            payload.dose = this.data.formConfigs.vaccine.unit
+            payload.status = this.data.selectedTag === '已接种' ? 'done' : this.data.selectedTag === '已预约' ? 'booked' : 'pending'
+            break
+        }
+
+        await add(type + '_records', payload)
+        wx.showToast({ title: '保存成功', icon: 'success' })
+        const cfg = this.data.formConfigs[type]
+        this.setData({ recordValue: cfg.defaultVal, note: '', selectedTag: '' })
+      } catch (e) {
+        wx.showToast({ title: '保存失败', icon: 'none' })
+        console.log('Save error:', e)
+      }
+      this.setData({ saving: false })
     }
   }
 })
