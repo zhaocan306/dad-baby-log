@@ -127,16 +127,6 @@
 
 <style>
 	.page {
-		--bg-cream: #FAF9F5;
-		--text-dark: #2D283E;
-		--text-gray: #8E8A9F;
-		--card-milk: #EEF0FF;
-		--card-sleep: #E8E5FF;
-		--card-poop: #F7E5DE;
-		--card-height: #EBF4ED;
-		--card-vaccine: #FFF6D6;
-		--baby-purple: #8B80F9;
-
 		min-height: 100vh;
 		background-color: var(--bg-cream);
 		color: var(--text-dark);

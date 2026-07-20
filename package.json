@@ -1,0 +1,9 @@
+{
+  "name": "dad-baby-log",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build:h5": "uni build -p h5",
+    "build:app": "uni build -p app"
+  }
+}

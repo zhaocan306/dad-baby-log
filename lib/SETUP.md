@@ -1,4 +1,4 @@
-# Supabase + Netlify 部署指南
+# Supabase 部署指南
 
 ## 1. 创建 Supabase 项目
 
@@ -18,32 +18,32 @@
 
 1. 进入 **Project Settings** → **API**
 2. 复制 `Project URL` 和 `anon public key`
-3. 打开项目 `lib/supabase.js`，替换：
+3. 打开 `lib/supabase.js`，替换：
 ```js
-const SUPABASE_URL = '你的 Project URL'
+const SUPABASE_URL = 'https://你的项目.supabase.co'
 const SUPABASE_ANON_KEY = '你的 anon key'
 ```
 
-## 4. 微信小程序白名单
+## 4. 配置匿名登录
 
-微信小程序后台 → 开发 → 开发管理 → 服务器域名：
-- request 合法域名：添加 `https://你的项目.supabase.co`
+Supabase → Authentication → Settings → Auth providers：
+- 开启 **Allow anonymous sign-ins**
 
-## 5. 部署到 Netlify
+## 5. 构建 App
 
 ```bash
-# 构建 H5
-uni build -p h5
+# 安装依赖
+npm install
+# 或
+yarn install
 
-# 输出目录: dist/build/h5
-# 在 Netlify 中设置:
-#   - 构建命令: uni build -p h5
-#   - 发布目录: dist/build/h5
-#   - 环境变量: SUPABASE_URL, SUPABASE_ANON_KEY
+# 构建 H5
+npm run build:h5
+
+# 构建 app
+npm run build:app
 ```
 
-## 6. 启用认证（可选）
+## 6. 运行
 
-Supabase → Authentication → Settings：
-- 开启 **Email + Password** 登录
-- （可选）开启手机号 / 微信登录
+在 HBuilderX 中打开项目，选择运行到浏览器或手机。

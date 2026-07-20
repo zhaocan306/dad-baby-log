@@ -1,7 +1,7 @@
 <template>
 	<view class="page">
 		<CustomNavbar/>
-		<scroll-view class="inner-padding" scroll-y>
+		<scroll-view class="inner-padding" scroll-y refresher-enabled refresher-background="#FAF9F5" @refresherrefresh="onRefresh" :refresher-triggered="refreshing">
 
 			<!-- 1. 页面头部标题区域 -->
 			<view class="header-section">
@@ -12,11 +12,22 @@
 			      <text class="title-sub">按周查看喝奶、睡眠和成长变化</text>
 			    </view>
 			  </view>
+			  <picker class="range-picker" mode="selector" :range="rangeOptions" range-key="label" :value="rangeIndex" @change="onRangeChange">
 			  <view class="weekly-badge">
-			    <text class="badge-text">本周</text>
+			    <text class="badge-text">{{ rangeOptions[rangeIndex].label }}</text>
 			  </view>
+			  </picker>
 			</view>
 
+			<view class="skel-grid">
+			  <view class="skeleton skel-trend-card" v-if="loading"></view>
+			  <view class="skeleton skel-trend-card" v-if="loading"></view>
+			  <view class="skeleton skel-trend-card" v-if="loading"></view>
+			  <view class="skeleton skel-trend-card" v-if="loading"></view>
+			</view>
+
+			<template v-if="!loading">
+			<view class="enter-stagger">
 			<!-- 2. 四个指标小卡片网格布局 -->
 			<view class="grid-layout mb-4">
 			  <view class="grid-card card-milk shadow-soft">
@@ -71,6 +82,7 @@
 
 			  <view class="chart-body">
 			    <view class="chart-bar-item" v-for="(item, index) in barData" :key="index">
+			      <text class="bar-value">{{ item.value }}ml</text>
 			      <view class="bar-track">
 			        <view
 			          :class="['bar-fill', item.highlight ? 'bar-highlight' : 'bar-normal']"
@@ -87,9 +99,11 @@
 			  <image class="tips-icon" src="/static/icon-tips.png" mode="aspectFit"></image>
 			  <view class="tips-content">
 			    <text class="tips-title">小提示</text>
-			    <text class="tips-desc">宝宝今天奶量集中在上午，下午可以提前准备一次安抚小睡。</text>
+			    <text class="tips-desc">{{ tipText }}</text>
 			  </view>
 			</view>
+			</view>
+			</template>
 
 		  </scroll-view>
 	</view>
@@ -97,6 +111,7 @@
 
 <script>
 	import CustomNavbar from "@/components/CustomNavbar.vue"
+	import { initCloud, getBabyId } from '@/lib/cloud'
 	import { feedApi } from '@/lib/api/feed'
 	import { sleepApi } from '@/lib/api/sleep'
 	import { poopApi } from '@/lib/api/poop'
@@ -109,48 +124,90 @@
 		components: { CustomNavbar },
 		data() {
 		    return {
-		      milkTotal: '3.42',
-		      milkChange: '+6%',
-		      sleepAvg: '15.8',
-		      nightWakes: '2',
-		      poopCount: '9',
-		      weightGain: '+180g',
-		      dailyAvgMl: '488',
+		      milkTotal: '--',
+		      milkChange: '+0%',
+		      sleepAvg: '--',
+		      nightWakes: '0',
+		      poopCount: '0',
+		      weightGain: '--',
+		      dailyAvgMl: '0',
 		      barData: [],
-		      rpxToPxSuffix: 'rpx'
+		      selectedBar: -1,
+			loading: true,
+			refreshing: false,
+		      rpxToPxSuffix: 'rpx',
+		      rangeIndex: 0,
+		      rangeOptions: [
+		        { label: '本周', days: 7 },
+		        { label: '本月', days: 30 },
+		        { label: '近三月', days: 90 }
+		      ],
+		      _alive: false
 		    };
+		},
+		  mounted() {
+		    this._alive = true
+		    setTimeout(() => this.loadData(), 100)
+		  },
+		  beforeUnmount() {
+		    this._alive = false
 		  },
 		  async onShow() {
 		    await this.loadData()
 		  },
 		  methods: {
-		    async loadData() {
+		    onRangeChange(e) { this.rangeIndex = +e.detail.value; this.loadData() },
+		async loadData() {
 		      try {
-		        const babyId = uni.getStorageSync('current_baby_id')
-		        if (!babyId) return
+		        const babyId = getBabyId()
+		        if (!babyId) { this.loading = false; return }
+		        await initCloud()
 
-		        const [feedStats, sleepStats, poopStats, heightLatest] = await Promise.all([
-		          feedApi.weeklyStats(babyId),
-		          sleepApi.weeklyStats(babyId),
-		          poopApi.weeklyStats(babyId),
-		          heightApi.latest(babyId)
+		        const days = this.rangeOptions[this.rangeIndex].days
+		        const [feeds, sleeps, poops, heights] = await Promise.all([
+		          feedApi.list(babyId, { limit: 500, days }).catch(() => []),
+		          sleepApi.list(babyId, { limit: 500, days }).catch(() => []),
+		          poopApi.list(babyId, { limit: 500, days }).catch(() => []),
+		          heightApi.list(babyId, { limit: 2 }).catch(() => [])
 		        ])
+		        const feedStats = feeds.length ? {
+		          total: feeds.reduce((s, r) => s + (r.amount_ml || 0), 0),
+		          dailyAvg: Math.round(feeds.reduce((s, r) => s + (r.amount_ml || 0), 0) / days),
+		          count: feeds.length,
+		          dailyMap: feeds.reduce((m, r) => { const d = (r.created_at || '').slice(0, 10); if (d) m[d] = (m[d] || 0) + (r.amount_ml || 0); return m }, {})
+		        } : null
+		        const sleepStats = sleeps.length ? {
+		          dailyAvg: sleeps.reduce((s, r) => s + (r.duration_min || 0), 0) / 60 / days,
+		          totalWakes: sleeps.reduce((s, r) => s + (r.wake_count || 0), 0),
+		          count: sleeps.length
+		        } : null
+		        const poopStats = poops.length ? { total: poops.length } : null
 
-		        this.milkTotal = (feedStats.total / 1000).toFixed(2) + 'L'
-		        this.dailyAvgMl = String(Math.round(feedStats.dailyAvg))
+		        // 奶量
+		        if (feedStats) {
+		          this.dailyAvgMl = String(Math.round(feedStats.dailyAvg || 0))
+		        }
 
-		        this.sleepAvg = (sleepStats.dailyAvg || 15.8) + 'h'
-		        this.nightWakes = String(sleepStats.totalWakes || 2)
+		        // 睡眠
+		        if (sleepStats) {
+		          this.nightWakes = String(sleepStats.totalWakes || 0)
+		        }
 
-		        this.poopCount = String(poopStats.total || 9) + ' 次'
+		        // 便便
+		        this.poopCount = String(poopStats?.total ?? 0) + ' 次'
 
-		        if (heightLatest) {
-		          this.weightGain = '+' + Math.round((heightLatest.weight_kg - 4.0) * 1000) + 'g'
+		        // 体重增长
+		        if (heights?.length >= 2) {
+		          const diff = (heights[0].weight_kg - heights[1].weight_kg) * 1000
+		          this.weightGain = (diff >= 0 ? '+' : '') + Math.round(diff) + 'g'
+		        } else if (heights?.length === 1) {
+		          this.weightGain = heights[0].weight_kg + 'kg'
 		        }
 
 		        // 7天柱状图
-		        const daily = feedStats.dailyMap || {}
-		        const maxVal = Math.max(...Object.values(daily), 1)
+		        const daily = feedStats?.dailyMap || {}
+		        const vals = Object.values(daily)
+		        const maxVal = Math.max(...vals, 1)
 		        const today = new Date()
 		        const bars = []
 		        for (let i = 6; i >= 0; i--) {
@@ -160,13 +217,59 @@
 		          const val = daily[key] || 0
 		          bars.push({
 		            day: DAY_NAMES[d.getDay()],
+		            value: val,
 		            percentage: Math.round((val / maxVal) * 130),
 		            highlight: i === 0
 		          })
 		        }
 		        this.barData = bars
+
+		        this.applyAnimations(feedStats, sleepStats, poopStats)
+
+		        // 动态提示
+		        if (feedStats?.count > 10) {
+		          this.tipText = '宝宝喝奶规律良好，继续保持哦'
+		        } else if (sleepStats?.dailyAvg > 12) {
+		          this.tipText = '宝宝睡眠充足，发育加分'
+		        } else if (feedStats?.count > 0) {
+		          this.tipText = '坚持记录，趋势会越来越清晰'
+		        }
 		      } catch (e) {
 		        console.log('Trend loadData error:', e.message)
+		      }
+		      this.loading = false
+		    },
+		    async onRefresh() {
+		      this.refreshing = true
+		      await this.loadData()
+		      this.refreshing = false
+		    },
+		    animateNum(from, to, setter, duration = 500) {
+		      if (!this._alive) return
+		      const start = Date.now()
+		      const step = () => {
+		        if (!this._alive) return
+		        const elapsed = Date.now() - start
+		        const progress = Math.min(elapsed / duration, 1)
+		        const spring = 1 - Math.pow(1 - progress, 3) + 0.12 * Math.sin(progress * Math.PI * 2.5) * (1 - progress)
+		        const val = from + (to - from) * Math.max(0, Math.min(1, spring))
+		        setter(to < 100 ? Math.round(val * 10) / 10 : Math.round(val))
+		        if (progress < 1 && this._alive) setTimeout(step, 16)
+		      }
+		      step()
+		    },
+		    applyAnimations(feedStats, sleepStats, poopStats) {
+		      if (feedStats) {
+		        const prev = parseFloat(this.milkTotal) || 0
+		        const target = feedStats.total ? feedStats.total / 1000 : 0
+		        this.animateNum(prev, target, v => this.milkTotal = v.toFixed(2) + 'L')
+		      }
+		      if (sleepStats?.dailyAvg) {
+		        this.animateNum(parseFloat(this.sleepAvg) || 0, sleepStats.dailyAvg, v => this.sleepAvg = v + 'h')
+		        this.animateNum(parseInt(this.nightWakes) || 0, sleepStats.totalWakes || 0, v => this.nightWakes = String(Math.round(v)))
+		      }
+		      if (poopStats) {
+		        this.animateNum(parseInt(this.poopCount) || 0, poopStats.total || 0, v => this.poopCount = String(Math.round(v)) + ' 次')
 		      }
 		    }
 		  }
@@ -175,25 +278,28 @@
 
 <style>
 	.page {
-		--bg-cream: #FAF9F5;
-		--text-dark: #2D283E;
-		--text-gray: #8E8A9F;
-		--card-milk: #EEF0FF;
-		--card-sleep: #E8E5FF;
-		--card-poop: #F7E5DE;
-		--card-height: #EBF4ED;
-		--card-vaccine: #FFF6D6;
-		--baby-purple: #8B80F9;
-
 		height: 100vh;
+		display: flex;
+		flex-direction: column;
 		background-color: var(--bg-cream);
 		color: var(--text-dark);
 	}
 
 	.inner-padding {
-	  height: 100%;
+	  flex: 1;
+	  height: 0;
 	  padding: 0 44rpx;
 	  width: calc(100% - 88rpx);
+	}
+
+	.enter-header { animation: trendSlide 0.4s ease-out both; }
+	.enter-card1 { animation: trendSlide 0.4s ease-out 0.08s both; }
+	.enter-card2 { animation: trendSlide 0.4s ease-out 0.16s both; }
+	.enter-card3 { animation: trendSlide 0.4s ease-out 0.24s both; }
+
+	@keyframes trendSlide {
+	  from { opacity: 0; transform: translateY(30rpx); }
+	  to { opacity: 1; transform: translateY(0); }
 	}
 
 	/* ==================== 头部信息区 ==================== */
@@ -232,6 +338,8 @@
 	  font-weight: 600;
 	  margin-top: 6rpx;
 	}
+
+	.range-picker { margin-left: auto; }
 
 	.weekly-badge {
 	  background-color: #FFFFFF;
@@ -357,13 +465,22 @@
 	  display: flex;
 	  flex-direction: column;
 	  align-items: center;
-	  width: 50rpx;
+	  width: 90rpx;
+	}
+
+	.bar-value {
+	  font-size: 22rpx;
+	  font-weight: 800;
+	  color: var(--baby-purple);
+	  margin-bottom: 8rpx;
+	  white-space: nowrap;
 	}
 
 	.bar-track {
-	  width: 32rpx;
+	  width: 40rpx;
 	  height: 180rpx;
-	  background-color: transparent;
+	  background-color: #F5F4FA;
+	  border-radius: 100rpx;
 	  position: relative;
 	  display: flex;
 	  align-items: flex-end;
@@ -372,20 +489,22 @@
 	.bar-fill {
 	  width: 100%;
 	  border-radius: 100rpx;
-	  transition: height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+	  transition: height 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+	  min-height: 8rpx;
 	}
 
 	.bar-normal {
-	  background-color: #C7D2FE;
-	  opacity: 0.8;
+	  background: linear-gradient(180deg, #D1CCFB, #C7C2F0);
+	  opacity: 1;
 	}
 
 	.bar-highlight {
-	  background-color: var(--baby-purple);
+	  background: linear-gradient(180deg, #8B80F9, #7B70E8);
+	  box-shadow: 0 4rpx 16rpx rgba(139, 128, 249, 0.35);
 	}
 
 	.bar-day-label {
-	  font-size: 22rpx;
+	  font-size: 24rpx;
 	  font-weight: 700;
 	  color: var(--text-gray);
 	  margin-top: 16rpx;
@@ -432,5 +551,29 @@
 	  font-weight: 600;
 	  margin-top: 8rpx;
 	  line-height: 1.5;
+	}
+
+	@keyframes shimmer {
+	  0% { background-position: -400rpx 0; }
+	  100% { background-position: 400rpx 0; }
+	}
+
+	.skeleton {
+	  background: linear-gradient(90deg, #EFEDF5 25%, #E5E0FF 50%, #EFEDF5 75%);
+	  background-size: 800rpx 100%;
+	  animation: shimmer 1.2s infinite ease-in-out;
+	  border-radius: 16rpx;
+	}
+
+	.skel-grid {
+	  display: grid;
+	  grid-template-columns: 1fr 1fr;
+	  grid-gap: 30rpx;
+	  margin-bottom: 30rpx;
+	}
+
+	.skel-trend-card {
+	  height: 236rpx;
+	  border-radius: 56rpx;
 	}
 </style>

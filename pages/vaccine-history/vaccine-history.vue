@@ -1,9 +1,9 @@
-<template>
+﻿﻿<template>
 	<view class="page">
 		<CustomNavbar showBack @back="goBack" />
 		<scroll-view class="inner-padding" scroll-y>
 
-			<!-- 1. 顶部标题区域 -->
+			<!-- 1. 椤堕儴鏍囬鍖哄煙 -->
 			<view class="header-section">
 			  <view class="title-text-group">
 			    <text class="title-main">疫苗历史</text>
@@ -14,12 +14,12 @@
 			  </view>
 			</view>
 
-			<!-- 2. 疫苗进度统计大卡片 -->
+			<!-- 2. 鐤嫍杩涘害缁熻澶у崱鐗?-->
 			<view class="card-vaccine-summary shadow-soft">
 			  <view class="card-header">
 			    <view class="title-with-icon">
 			      <image class="summary-card-icon" src="/static/icon-vaccine-summary.png" mode="aspectFit"></image>
-			      <text class="card-title">疫苗进度</text>
+			      <text class="card-title">鐤嫍杩涘害</text>
 			    </view>
 			    <view class="status-badge">
 			      <text class="status-badge-text">还剩2天</text>
@@ -42,14 +42,14 @@
 			  </view>
 			</view>
 
-			<!-- 3. 最近记录列表区域 -->
+			<!-- 3. 鏈€杩戣褰曞垪琛ㄥ尯鍩?-->
 			<view class="recent-records-section">
 			  <view class="records-header">
 			    <text class="section-title">最近记录</text>
 			    <text class="sort-text">按日期</text>
 			  </view>
 
-			  			  <view class="records-list-container shadow-mini">
+			  			  <view class="records-list-container shadow-mini list-enter">
 			    <view class="record-item" v-for="(r, i) in records" :key="r.id" :class="{ 'no-border': i === records.length - 1 }">
 			      <view class="record-left">
 			        <image class="record-type-icon" src="/static/list-icon-vaccine-done.png" mode="aspectFit"></image>
@@ -83,7 +83,7 @@
 		methods: {
 			async loadData() {
 				try {
-					const babyId = uni.getStorageSync('current_baby_id')
+					const babyId = getBabyId()
 					if (!babyId) return
 					const s = await vaccineApi.stats(babyId)
 					this.stats = s || { done: 2, booked: 1, pending: 0, overdue: 0 }
@@ -116,7 +116,7 @@
 	  width: calc(100% - 88rpx);
 	}
 
-	/* ==================== 头部区域 ==================== */
+	/* ==================== 澶撮儴鍖哄煙 ==================== */
 	.header-section {
 	  display: flex;
 	  justify-content: space-between;
@@ -158,7 +158,7 @@
 	  color: var(--baby-purple);
 	}
 
-	/* ==================== 统计汇总大卡片 ==================== */
+	/* ==================== 缁熻姹囨€诲ぇ鍗＄墖 ==================== */
 	.card-vaccine-summary {
 	  background-color: var(--card-vaccine);
 	  border-radius: 56rpx;
@@ -247,7 +247,7 @@
 	  margin-top: 6rpx;
 	}
 
-	/* ==================== 最近记录列表 ==================== */
+	/* ==================== 鏈€杩戣褰曞垪琛?==================== */
 	.recent-records-section {
 	  display: flex;
 	  flex-direction: column;

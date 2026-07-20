@@ -1,25 +1,25 @@
-<template>
+﻿<template>
 	<view class="page">
 		<CustomNavbar showBack @back="goBack" />
 		<scroll-view class="inner-padding" scroll-y>
 
-			<!-- 1. 顶部标题区域 -->
+			<!-- 1. 椤堕儴鏍囬鍖哄煙 -->
 			<view class="header-section">
 			  <view class="title-text-group">
-			    <text class="title-main">睡眠历史</text>
-			    <text class="title-sub">查看小睡、夜睡和夜醒情况</text>
+			    <text class="title-main">鐫＄湢鍘嗗彶</text>
+			    <text class="title-sub">鏌ョ湅灏忕潯銆佸鐫″拰夜醒鎯呭喌</text>
 			  </view>
 			  <view class="time-badge">
 			    <text class="badge-text">7天</text>
 			  </view>
 			</view>
 
-			<!-- 2. 本周睡眠统计大卡片 -->
+			<!-- 2. 鏈懆鐫＄湢缁熻澶у崱鐗?-->
 			<view class="card-sleep-summary shadow-soft">
 			  <view class="card-header">
 			    <view class="title-with-icon">
 			      <image class="summary-card-icon" src="/static/icon-sleep-summary.png" mode="aspectFit"></image>
-			      <text class="card-title">本周睡眠</text>
+			      <text class="card-title">鏈懆鐫＄湢</text>
 			    </view>
 			    <view class="status-badge">
 			      <text class="status-badge-text">+0.8h</text>
@@ -33,7 +33,7 @@
 			    </view>
 			    <view class="stat-item">
 			      <text class="stat-number">{{ stats.dailyAvg || '15.8' }}h</text>
-			      <text class="stat-label">日均</text>
+			      <text class="stat-label">鏃ュ潎</text>
 			    </view>
 			    <view class="stat-item">
 			      <text class="stat-number">{{ stats.totalWakes || '6' }}次</text>
@@ -42,20 +42,20 @@
 			  </view>
 			</view>
 
-			<!-- 3. 最近记录列表区域 -->
+			<!-- 3. 鏈€杩戣褰曞垪琛ㄥ尯鍩?-->
 			<view class="recent-records-section">
 			  <view class="records-header">
 			    <text class="section-title">最近记录</text>
 			    <text class="sort-text">按日期</text>
 			  </view>
 
-			  <view class="records-list-container shadow-mini">
+			  <view class="records-list-container shadow-mini list-enter">
 			    <view class="record-item" v-for="(r, i) in records" :key="r.id" :class="{ 'no-border': i === records.length - 1 }">
 			      <view class="record-left">
 			        <image class="record-type-icon" src="/static/list-icon-nap.png" mode="aspectFit"></image>
 			        <view class="record-meta">
 			          <text class="record-name">{{ r.type === 'night' ? '夜间睡眠' : r.type === 'morning' ? '晨间回笼觉' : '日间小睡' }} · {{ Math.round(r.duration_min / 60 * 10) / 10 || '' }}小时</text>
-			          <text class="record-desc">{{ r.start_time?.slice(11, 16) || '' }} · {{ r.note || '' }}</text>
+			          <text class="record-desc">{{ r.start_time?.slice(11, 16) || '' }} 路 {{ r.note || '' }}</text>
 			        </view>
 			      </view>
 			      <text class="record-time">{{ r.start_time?.slice(11, 16) || '' }}</text>
@@ -83,7 +83,7 @@
 		methods: {
 			async loadData() {
 				try {
-					const babyId = uni.getStorageSync('current_baby_id')
+					const babyId = getBabyId()
 					if (!babyId) return
 					const s = await sleepApi.weeklyStats(babyId)
 						this.stats = {
@@ -124,7 +124,7 @@
 	  width: calc(100% - 88rpx);
 	}
 
-	/* ==================== 头部区域 ==================== */
+	/* ==================== 澶撮儴鍖哄煙 ==================== */
 	.header-section {
 	  display: flex;
 	  justify-content: space-between;
@@ -166,7 +166,7 @@
 	  color: var(--baby-purple);
 	}
 
-	/* ==================== 本周睡眠大卡片 ==================== */
+	/* ==================== 鏈懆鐫＄湢澶у崱鐗?==================== */
 	.card-sleep-summary {
 	  background-color: var(--card-sleep);
 	  border-radius: 56rpx;
@@ -255,7 +255,7 @@
 	  margin-top: 6rpx;
 	}
 
-	/* ==================== 最近记录列表 ==================== */
+	/* ==================== 鏈€杩戣褰曞垪琛?==================== */
 	.recent-records-section {
 	  display: flex;
 	  flex-direction: column;

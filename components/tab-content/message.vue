@@ -12,23 +12,32 @@
 			  <image class="header-setting-icon" src="/static/icon-setting.png" mode="aspectFit"></image>
 			</view>
 
+			<template v-if="loading">
+			  <view class="skeleton skel-message-card"></view>
+			  <view class="skeleton skel-message-menu"></view>
+			  <view class="skeleton skel-message-list"></view>
+			  <view class="skeleton skel-message-list"></view>
+			</template>
+
+			<template v-else>
+			<view class="enter-stagger">
 			<!-- 2. 家庭核心数据大卡片 -->
 			<view class="card-family shadow-soft">
 			  <view class="profile-info-row">
 			    <image class="family-avatar" src="/static/family-avatar.png" mode="aspectFit"></image>
 			    <view class="profile-meta">
 			      <text class="family-name">{{ family?.name || baby?.name || 'cc cc' }} 的家庭</text>
-			      <text class="baby-detail">{{ baby?.name || '小鲸鱼' }} · {{ baby?.birthday ? Math.floor((Date.now() - new Date(baby.birthday).getTime()) / 86400000) : '29' }} 天{{ baby?.gender === 'female' ? ' · 女宝宝' : baby?.gender === 'male' ? ' · 男宝宝' : '' }}</text>
+			      <text class="baby-detail">{{ baby?.name || '小鲸鱼' }} · {{ stageText }}{{ baby?.gender === 'female' ? ' · 女宝宝' : baby?.gender === 'male' ? ' · 男宝宝' : '' }}</text>
 			      <view class="member-badge">
 			        <image class="member-badge-icon" src="/static/icon-group.png" mode="aspectFit"></image>
-			        <text class="member-badge-text">{{ family?.members?.length || '3' }} 位家人同步记录</text>
+			        <text class="member-badge-text">{{ (family?.members?.length || 1) }} 位家人同步记录</text>
 			      </view>
 			    </view>
 			  </view>
 
 			  <view class="stats-row">
 			    <view class="stat-item">
-			      <text class="stat-number">{{ baby?.birthday ? Math.floor((Date.now() - new Date(baby.birthday).getTime()) / 86400000) : '29' }}</text>
+			      <text class="stat-number">{{ recordDays }}</text>
 			      <text class="stat-label">记录天</text>
 			    </view>
 			    <view class="stat-item">
@@ -44,22 +53,30 @@
 
 			<!-- 3. 四个功能入口网格 -->
 			<view class="grid-4 mb-6">
+			  <navigator url="/pages/baby-profile/baby-profile" open-type="navigate" hover-class="none">
 			  <view class="menu-card shadow-mini">
 			    <image class="menu-icon" src="/static/menu-baby.png" mode="aspectFit"></image>
 			    <text class="menu-label">宝宝档案</text>
 			  </view>
+			  </navigator>
+			  <navigator url="/pages/family-members/family-members" open-type="navigate" hover-class="none">
 			  <view class="menu-card shadow-mini">
 			    <image class="menu-icon" src="/static/menu-members.png" mode="aspectFit"></image>
 			    <text class="menu-label">家庭成员</text>
 			  </view>
+			  </navigator>
+			  <navigator url="/pages/reminder-settings/reminder-settings" open-type="navigate" hover-class="none">
 			  <view class="menu-card shadow-mini">
 			    <image class="menu-icon" src="/static/menu-notif.png" mode="aspectFit"></image>
 			    <text class="menu-label">提醒设置</text>
 			  </view>
+			  </navigator>
+			  <navigator url="/pages/data-export/data-export" open-type="navigate" hover-class="none">
 			  <view class="menu-card shadow-mini">
 			    <image class="menu-icon" src="/static/menu-export.png" mode="aspectFit"></image>
 			    <text class="menu-label">数据导出</text>
 			  </view>
+			  </navigator>
 			</view>
 
 			<!-- 4. 照护设置列表 -->
@@ -67,6 +84,7 @@
 			  <text class="panel-title">照护设置</text>
 
 			  <view class="setting-list">
+			  <navigator url="/pages/growth-standard/growth-standard" open-type="navigate" hover-class="none">
 			    <view class="setting-item">
 			      <view class="setting-item-left">
 			        <image class="setting-icon bg-green-light" src="/static/setting-curve.png" mode="aspectFit"></image>
@@ -77,7 +95,9 @@
 			      </view>
 			      <image class="arrow-icon" src="/static/icon-arrow-right.png" mode="aspectFit"></image>
 			    </view>
+			  </navigator>
 
+			  <navigator url="/pages/reminder-settings/reminder-settings" open-type="navigate" hover-class="none">
 			    <view class="setting-item">
 			      <view class="setting-item-left">
 			        <image class="setting-icon bg-amber-light" src="/static/setting-time.png" mode="aspectFit"></image>
@@ -88,7 +108,9 @@
 			      </view>
 			      <image class="arrow-icon" src="/static/icon-arrow-right.png" mode="aspectFit"></image>
 			    </view>
+			  </navigator>
 
+			  <navigator url="/pages/data-export/data-export" open-type="navigate" hover-class="none">
 			    <view class="setting-item">
 			      <view class="setting-item-left">
 			        <image class="setting-icon bg-blue-light" src="/static/setting-backup.png" mode="aspectFit"></image>
@@ -99,7 +121,9 @@
 			      </view>
 			      <image class="arrow-icon" src="/static/icon-arrow-right.png" mode="aspectFit"></image>
 			    </view>
+			  </navigator>
 
+			  <navigator url="/pages/privacy-security/privacy-security" open-type="navigate" hover-class="none">
 			    <view class="setting-item no-border">
 			      <view class="setting-item-left">
 			        <image class="setting-icon bg-rose-light" src="/static/setting-privacy.png" mode="aspectFit"></image>
@@ -110,8 +134,11 @@
 			      </view>
 			      <image class="arrow-icon" src="/static/icon-arrow-right.png" mode="aspectFit"></image>
 			    </view>
+			  </navigator>
 			  </view>
 			</view>
+			</view>
+			</template>
 
 		  </scroll-view>
 	</view>
@@ -119,18 +146,44 @@
 
 <script>
 	import CustomNavbar from "@/components/CustomNavbar.vue"
+	import { initCloud, getUser, add, getBabyId } from '@/lib/cloud'
 	import { familyApi } from '@/lib/api/family'
 	import { feedApi } from '@/lib/api/feed'
+	import { sleepApi } from '@/lib/api/sleep'
+	import { poopApi } from '@/lib/api/poop'
+	import { heightApi } from '@/lib/api/height'
+	import { vaccineApi } from '@/lib/api/vaccine'
 
 	export default {
 		name: "TabMessage",
 		components: { CustomNavbar },
+		computed: {
+			stageText() {
+				if (!this.baby) return ''
+				if (this.baby.birthday) {
+					const days = Math.floor((Date.now() - new Date(this.baby.birthday).getTime()) / 86400000)
+					return `${days} 天`
+				}
+				if (this.baby.due_date) {
+					const days = Math.ceil((new Date(this.baby.due_date) - Date.now()) / 86400000)
+					if (days > 0) return `预产期还有 ${days} 天`
+					if (days === 0) return '预产期今天'
+					return `已过预产期 ${Math.abs(days)} 天`
+				}
+				return ''
+			}
+		},
 		data() {
 			return {
 				family: null,
 				baby: null,
-				totalRecords: 0
+				totalRecords: 0,
+			recordDays: 0,
+			loading: true
 			}
+		},
+		mounted() {
+			setTimeout(() => this.loadData(), 100)
 		},
 		async onShow() {
 			await this.loadData()
@@ -138,18 +191,53 @@
 		methods: {
 			async loadData() {
 				try {
-					this.family = await familyApi.getCurrent()
-					if (this.family?.babies?.length) {
-						this.baby = this.family.babies[0]
+					await initCloud()
+					const babyId = getBabyId()
+					if (!babyId) return
+
+					const [family, feeds, sleeps, poops, heights, vaccines] = await Promise.all([
+						familyApi.getCurrent().catch(() => null),
+						feedApi.list(babyId, { limit: 1000, days: 365 }).catch(() => []),
+						sleepApi.list(babyId, { limit: 1000, days: 365 }).catch(() => []),
+						poopApi.list(babyId, { limit: 1000, days: 365 }).catch(() => []),
+						heightApi.list(babyId, { limit: 100 }).catch(() => []),
+						vaccineApi.list(babyId).catch(() => [])
+					])
+
+					this.family = family
+					if (family?.babies?.length) this.baby = family.babies[0]
+
+					this.totalRecords = feeds.length + sleeps.length + poops.length + heights.length + vaccines.length
+
+					// 确保有家庭成员记录
+					if (family && family.id && (!family.members || !family.members.length)) {
+						const user = (await getUser()).data.user
+						const mid = await add('members', {
+							family_id: family.id, user_id: user?.id || 'local', role: 'owner'
+						})
+						if (mid) family.members = [{ id: mid, user_id: user?.id }]
 					}
-					const babyId = uni.getStorageSync('current_baby_id')
-					if (babyId) {
-						const feeds = await feedApi.list(babyId, { limit: 1000, days: 365 })
-						this.totalRecords = feeds.length || 186
+
+					// 记录天数（从第一条记录到现在的天数）
+					const allDates = [
+						...feeds.map(r => r.created_at),
+						...sleeps.map(r => r.created_at || r.start_time),
+						...poops.map(r => r.created_at),
+						...heights.map(r => r.date),
+						...vaccines.map(r => r.created_at)
+					].filter(Boolean)
+					if (allDates.length) {
+						const first = new Date(Math.min(...allDates.map(d => new Date(d).getTime())))
+						this.recordDays = Math.floor((Date.now() - first.getTime()) / 86400000) || 1
+					} else {
+						this.recordDays = this.baby?.birthday
+							? Math.floor((Date.now() - new Date(this.baby.birthday).getTime()) / 86400000)
+							: 0
 					}
 				} catch (e) {
 					console.log('Message loadData error:', e.message)
 				}
+				this.loading = false
 			}
 		}
 	}
@@ -157,24 +245,17 @@
 
 <style>
 	.page {
-		--bg-cream: #FAF9F5;
-		--text-dark: #2D283E;
-		--text-gray: #8E8A9F;
-		--card-milk: #EEF0FF;
-		--card-sleep: #E8E5FF;
-		--card-poop: #F7E5DE;
-		--card-height: #EBF4ED;
-		--card-vaccine: #FFF6D6;
-		--baby-purple: #8B80F9;
-
 		height: 100vh;
+		display: flex;
+		flex-direction: column;
 		background-color: var(--bg-cream);
 		color: var(--text-dark);
 	}
 
 	.inner-padding {
-	  height: 100%;
-	  padding: 0 44rpx;
+	  flex: 1;
+	  height: 0;
+	  padding: 0 44rpx 160rpx;
 	  width: calc(100% - 88rpx);
 	}
 
@@ -433,4 +514,13 @@
 	  height: 24rpx;
 	  flex-shrink: 0;
 	}
+
+	@keyframes shimmer {
+		0% { background-position: -400rpx 0; }
+		100% { background-position: 400rpx 0; }
+	}
+	.skeleton { background: linear-gradient(90deg, #EFEDF5 25%, #E5E0FF 50%, #EFEDF5 75%); background-size: 800rpx 100%; animation: shimmer 1.2s infinite ease-in-out; border-radius: 16rpx; }
+	.skel-message-card { height: 320rpx; border-radius: 56rpx; margin-bottom: 30rpx; }
+	.skel-message-menu { height: 160rpx; border-radius: 40rpx; margin-bottom: 30rpx; }
+	.skel-message-list { height: 100rpx; border-radius: 56rpx; margin-bottom: 20rpx; }
 </style>

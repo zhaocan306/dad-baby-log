@@ -2,6 +2,16 @@
 -- Baby Growth Record - Supabase Migration
 -- ==========================================
 
+DROP TABLE IF EXISTS milestones CASCADE;
+DROP TABLE IF EXISTS vaccine_records CASCADE;
+DROP TABLE IF EXISTS height_records CASCADE;
+DROP TABLE IF EXISTS poop_records CASCADE;
+DROP TABLE IF EXISTS sleep_records CASCADE;
+DROP TABLE IF EXISTS feed_records CASCADE;
+DROP TABLE IF EXISTS babies CASCADE;
+DROP TABLE IF EXISTS members CASCADE;
+DROP TABLE IF EXISTS families CASCADE;
+
 -- 1. 家庭表
 CREATE TABLE families (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -25,7 +35,8 @@ CREATE TABLE babies (
   family_id UUID NOT NULL REFERENCES families(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   gender TEXT CHECK (gender IN ('male', 'female')),
-  birthday DATE NOT NULL,
+  birthday DATE,
+  due_date DATE,
   avatar TEXT,
   created_at TIMESTAMPTZ DEFAULT now()
 );
@@ -122,63 +133,14 @@ CREATE INDEX idx_vaccine_baby ON vaccine_records(baby_id, due_date);
 CREATE INDEX idx_milestone_baby ON milestones(baby_id, age_month);
 
 -- ==========================================
--- Row Level Security
+-- Row Level Security (关闭，个人App不需要)
 -- ==========================================
-ALTER TABLE families ENABLE ROW LEVEL SECURITY;
-ALTER TABLE members ENABLE ROW LEVEL SECURITY;
-ALTER TABLE babies ENABLE ROW LEVEL SECURITY;
-ALTER TABLE feed_records ENABLE ROW LEVEL SECURITY;
-ALTER TABLE sleep_records ENABLE ROW LEVEL SECURITY;
-ALTER TABLE poop_records ENABLE ROW LEVEL SECURITY;
-ALTER TABLE height_records ENABLE ROW LEVEL SECURITY;
-ALTER TABLE vaccine_records ENABLE ROW LEVEL SECURITY;
-ALTER TABLE milestones ENABLE ROW LEVEL SECURITY;
-
--- 通用策略：用户只能访问自己家庭的数据
-CREATE POLICY "users_can_access_own_family" ON families
-  FOR ALL USING (
-    id IN (SELECT family_id FROM members WHERE user_id = auth.uid())
-  );
-
-CREATE POLICY "members_see_own" ON members
-  FOR ALL USING (user_id = auth.uid());
-
-CREATE POLICY "family_members_access" ON babies
-  FOR ALL USING (
-    family_id IN (SELECT family_id FROM members WHERE user_id = auth.uid())
-  );
-
-CREATE POLICY "family_data_access" ON feed_records
-  FOR ALL USING (
-    baby_id IN (
-      SELECT b.id FROM babies b
-      JOIN members m ON m.family_id = b.family_id
-      WHERE m.user_id = auth.uid()
-    )
-  );
-
--- 其余表复用同一策略
-CREATE POLICY "family_data_access" ON sleep_records
-  FOR ALL USING (baby_id IN (
-    SELECT b.id FROM babies b JOIN members m ON m.family_id = b.family_id WHERE m.user_id = auth.uid()
-  ));
-
-CREATE POLICY "family_data_access" ON poop_records
-  FOR ALL USING (baby_id IN (
-    SELECT b.id FROM babies b JOIN members m ON m.family_id = b.family_id WHERE m.user_id = auth.uid()
-  ));
-
-CREATE POLICY "family_data_access" ON height_records
-  FOR ALL USING (baby_id IN (
-    SELECT b.id FROM babies b JOIN members m ON m.family_id = b.family_id WHERE m.user_id = auth.uid()
-  ));
-
-CREATE POLICY "family_data_access" ON vaccine_records
-  FOR ALL USING (baby_id IN (
-    SELECT b.id FROM babies b JOIN members m ON m.family_id = b.family_id WHERE m.user_id = auth.uid()
-  ));
-
-CREATE POLICY "family_data_access" ON milestones
-  FOR ALL USING (baby_id IN (
-    SELECT b.id FROM babies b JOIN members m ON m.family_id = b.family_id WHERE m.user_id = auth.uid()
-  ));
+ALTER TABLE families DISABLE ROW LEVEL SECURITY;
+ALTER TABLE members DISABLE ROW LEVEL SECURITY;
+ALTER TABLE babies DISABLE ROW LEVEL SECURITY;
+ALTER TABLE feed_records DISABLE ROW LEVEL SECURITY;
+ALTER TABLE sleep_records DISABLE ROW LEVEL SECURITY;
+ALTER TABLE poop_records DISABLE ROW LEVEL SECURITY;
+ALTER TABLE height_records DISABLE ROW LEVEL SECURITY;
+ALTER TABLE vaccine_records DISABLE ROW LEVEL SECURITY;
+ALTER TABLE milestones DISABLE ROW LEVEL SECURITY;

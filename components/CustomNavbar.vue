@@ -35,14 +35,15 @@
 	.custom-navbar {
 		box-sizing: border-box;
 		width: 100%;
-		height: 88px;
+		height: 54px;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
-		padding: 0 16px;
-		padding-top: 44px;
+		padding: 0 10px;
+		padding-top: 30px;
 		flex-shrink: 0;
+		overflow: hidden;
 	}
 
 	.nav-left {

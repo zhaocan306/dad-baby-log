@@ -1,6 +1,14 @@
 /* ===== 页面基础 ===== */
 .page {
-	height: calc(100vh - 160rpx);
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.page-scroll {
+	flex: 1;
+	overflow: hidden;
+	padding-bottom: 160rpx;
 }
 
 /* ===== 奶量卡片 ===== */
@@ -14,6 +22,11 @@
 	position: relative;
 	z-index: 1;
 	overflow: hidden;
+	transition: transform 0.15s;
+}
+
+.milk-card:active {
+	transform: scale(0.97);
 }
 
 .milk-card__header {
@@ -135,6 +148,11 @@
 	display: flex;
 	flex-direction: column;
 	position: relative;
+	transition: transform 0.15s;
+}
+
+.grid-card:active {
+	transform: scale(0.97);
 }
 
 .height-auto {
@@ -186,6 +204,23 @@
 	display: flex;
 	align-items: flex-end;
 	margin: 24rpx 0;
+}
+
+.grid-card__body--empty {
+	align-items: center;
+	justify-content: center;
+	margin: 16rpx 0;
+}
+
+.grid-card__empty-text {
+	font-size: 28rpx;
+	font-weight: 700;
+	color: #B8B5C8;
+}
+
+.grid-card__tip--empty {
+	color: #B8B5C8 !important;
+	font-weight: 600;
 }
 
 .grid-card__value {
@@ -265,16 +300,22 @@
 	margin: 20rpx 40rpx;
 }
 
-.recent-header {
+.records-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 24rpx;
 }
 
-.recent-header .section-title {
+.records-header .section-title {
 	font-size: 36rpx;
 	font-weight: 900;
+}
+
+.sort-text {
+	font-size: 24rpx;
+	font-weight: 800;
+	color: var(--baby-purple, #8B80F9);
 }
 
 .btn-all-wrapper {
@@ -352,6 +393,42 @@
 	color: #8E8A9F;
 }
 
+/* ===== 空状态 ===== */
+.activity-empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 60rpx 0;
+}
+
+.activity-empty-icon {
+	width: 120rpx;
+	height: 120rpx;
+	background-color: #F3F1FF;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 20rpx;
+}
+
+.activity-empty-emoji {
+	font-size: 52rpx;
+}
+
+.activity-empty-title {
+	font-size: 30rpx;
+	font-weight: 800;
+	color: var(--text-dark, #2D283E);
+	margin-bottom: 8rpx;
+}
+
+.activity-empty-text {
+	font-size: 24rpx;
+	color: #8E8A9F;
+	font-weight: 600;
+}
+
 /* ===== 底部提示 ===== */
 .footer-tip {
 	display: flex;
@@ -364,4 +441,48 @@
 	font-size: 24rpx;
 	color: #8E8A9F;
 	font-weight: 600;
+}
+
+/* ===== 骨架屏 ===== */
+@keyframes shimmer {
+	0% { background-position: -400rpx 0; }
+	100% { background-position: 400rpx 0; }
+}
+
+.skeleton {
+	background: linear-gradient(90deg, #EFEDF5 25%, #E5E0FF 50%, #EFEDF5 75%);
+	background-size: 800rpx 100%;
+	animation: shimmer 1.2s infinite ease-in-out;
+	border-radius: 16rpx;
+	transition: opacity 0.15s ease-out;
+}
+
+.skel-milk {
+	height: 360rpx;
+	margin: 40rpx;
+	border-radius: 68rpx;
+}
+
+.skel-grid {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 24rpx;
+	width: calc(100% - 80rpx);
+	margin: 0 40rpx 20rpx;
+}
+
+.skel-card {
+	width: 319rpx;
+	height: 300rpx;
+	border-radius: 60rpx;
+}
+
+.skel-list {
+	margin: 20rpx 40rpx;
+}
+
+.skel-item {
+	height: 120rpx;
+	border-radius: 40rpx;
+	margin-bottom: 20rpx;
 }
